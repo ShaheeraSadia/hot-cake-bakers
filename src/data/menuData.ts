@@ -10,16 +10,18 @@ import chickenPizzaImg from '../assets/images/product_chicken_pizza_179455754610
 import fajitaPizzaImg from '../assets/images/product_fajita_pizza_1794567027328.jpg';
 import traditionalSweetsImg from '../assets/images/product_traditional_sweets_1794557547576.jpg';
 import barfiJamunImg from '../assets/images/product_barfi_jamun_1794567029380.jpg';
-import heroBakerySpreadImg from '../assets/images/hero_bakery_spread_1794567031602.jpg';
+import heroBakerySpreadImg from '../assets/images/hero_bakery_counter_men_1794576396280.jpg';
 
 import { MenuCategory, MenuItem } from '../types/bakery';
 
 export const BAKERY_INFO = {
   name: 'Hot Cake Bakers',
   urduName: 'ہاٹ کیک بیکرز، لاڑی اڈا',
-  address: 'Kashmir Road, Kotli Behram, Sialkot, 51310',
+  address: 'Lari Ada, Kashmir Road, Kotli Behram, Sialkot, 51310',
   phoneDisplay: '+92 341 9347002',
   whatsappDigits: '923419347002',
+  secondaryPhoneDisplay: '+92 320 0172727',
+  secondaryPhoneDigits: '923200172727',
   hoursDisplay: '7:00 AM – 1:30 AM Daily',
   shortHours: 'Open till 1:30 AM',
   services: 'Takeout & Delivery',
@@ -28,7 +30,7 @@ export const BAKERY_INFO = {
   heroImage: heroBakerySpreadImg,
   secondaryShowcaseImage: heroBakerySpreadImg,
   googleMapsUrl:
-    'https://www.google.com/maps/search/?api=1&query=Hot+Cake+Bakers+Kashmir+Road+Kotli+Behram+Sialkot+51310',
+    'https://www.google.com/maps/search/?api=1&query=Hot+Cake+Bakers+Lari+Ada+Kashmir+Road+Kotli+Behram+Sialkot+51310',
 } as const;
 
 export interface HeroSlide {

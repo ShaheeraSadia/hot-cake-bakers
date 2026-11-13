@@ -352,7 +352,7 @@ export default function App() {
                     <ArrowRight className="w-4 h-4" aria-hidden="true" />
                   </a>
                   <a
-                    href={`tel:${BAKERY_INFO.whatsappDigits}`}
+                    href={`tel:+${BAKERY_INFO.whatsappDigits}`}
                     className="inline-flex items-center gap-2 bg-white dark:bg-[#1D1916] hover:bg-[#F3F1ED] dark:hover:bg-[#26211D] text-[#1C1815] dark:text-[#F5F2EC] border border-[#E5E1DA] dark:border-[#342D28] text-sm font-medium px-5 py-3 rounded-lg transition-colors duration-150 whitespace-nowrap shrink-0"
                   >
                     <Phone className="w-4 h-4 text-[#1B4332] dark:text-[#74C69D]" aria-hidden="true" />
@@ -372,25 +372,25 @@ export default function App() {
 
             <div className="mt-10 pt-8 border-t border-[#E5E1DA] dark:border-[#342D28] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               <div>
-                <p className="text-xs font-medium text-[#57534E] dark:text-[#D6D3D1]">Daily Schedule</p>
+                <p className="text-xs font-medium text-[#57534E] dark:text-[#D6D3D1]">Sialkot Heritage</p>
                 <p className="text-sm font-semibold text-[#1C1815] dark:text-[#F5F2EC] mt-1">
-                  Fresh Batches All Day
+                  30+ Years · Three Decades Old Name
                 </p>
               </div>
               <div>
-                <p className="text-xs font-medium text-[#57534E] dark:text-[#D6D3D1]">Fulfillment</p>
+                <p className="text-xs font-medium text-[#57534E] dark:text-[#D6D3D1]">Direct Ordering</p>
                 <p className="text-sm font-semibold text-[#1C1815] dark:text-[#F5F2EC] mt-1">
-                  Takeout &amp; Sialkot Delivery
+                  WhatsApp Direct · Zero App Markup
                 </p>
               </div>
               <div>
-                <p className="text-xs font-medium text-[#57534E] dark:text-[#D6D3D1]">Popular Specialties</p>
+                <p className="text-xs font-medium text-[#57534E] dark:text-[#D6D3D1]">Location Landmark</p>
                 <p className="text-sm font-semibold text-[#1C1815] dark:text-[#F5F2EC] mt-1">
-                  Cakes, Rusk, Halwa Puri &amp; Pizza
+                  Lari Ada, Kashmir Road, Sialkot
                 </p>
               </div>
               <div>
-                <p className="text-xs font-medium text-[#57534E] dark:text-[#D6D3D1]">Direct WhatsApp Desk</p>
+                <p className="text-xs font-medium text-[#57534E] dark:text-[#D6D3D1]">Direct Phone &amp; WhatsApp</p>
                 <p className="text-sm font-semibold text-[#1C1815] dark:text-[#F5F2EC] mt-1 tabular-nums">
                   {BAKERY_INFO.phoneDisplay}
                 </p>
@@ -623,15 +623,15 @@ export default function App() {
               <div className="lg:col-span-7 flex flex-col justify-center gap-6">
                 <div className="space-y-2">
                   <p className="text-xs font-medium text-[#1B4332] dark:text-[#74C69D]">
-                    Daily Kitchen &amp; Bakery Craft · Kotli Behram
+                    About Hot Cake Bakers · Three Decades in Sialkot
                   </p>
                   <h2 className="font-display text-3xl font-semibold text-[#1C1815] dark:text-[#F5F2EC] text-balance">
-                    From morning Halwa Puri to midnight celebrations.
+                    A three-decades-old Sialkot bakery name on Kashmir Road.
                   </h2>
                 </div>
 
                 <p className="text-base text-[#44403C] dark:text-[#D6D3D1] leading-relaxed">
-                  Situated on Kashmir Road near Lari Adda in Kotli Behram, Hot Cake Bakers pairs traditional Sialkoti breakfast and mithai craftsmanship with fresh evening baking for takeout and home delivery.
+                  Serving families around Lari Ada, Kashmir Road, and Kotli Behram for over 30 years, Hot Cake Bakers pairs traditional Sialkoti breakfast and pure khoya mithai with freshly baked cakes, pastries, and savories. Order directly via WhatsApp with zero third-party app markups for counter pickup or Sialkot delivery—alongside our active Foodpanda storefront.
                 </p>
 
                 <div className="flex flex-wrap items-center gap-3 pt-1">
@@ -678,12 +678,12 @@ export default function App() {
                   Visit Our Bakery
                 </p>
                 <h2 className="font-display text-3xl font-semibold text-[#1C1815] dark:text-[#F5F2EC] mt-1 text-balance">
-                  Kashmir Road, Kotli Behram, Sialkot
+                  Lari Ada, Kashmir Road, Sialkot
                 </h2>
               </div>
 
               <p className="text-sm text-[#44403C] dark:text-[#D6D3D1] leading-relaxed">
-                Located near Lari Adda on Main Kashmir Road, Sialkot. Stop by for fresh counter takeout, morning Halwa Puri, or custom celebration cakes.
+                Located at Lari Ada on Main Kashmir Road, Kotli Behram, Sialkot (also listed on Waze &amp; Foodpanda). Stop by for fresh counter takeout, morning Halwa Puri, or custom celebration cakes.
               </p>
 
               <ul className="space-y-3 text-sm text-[#1C1815] dark:text-[#F5F2EC] pt-2 border-t border-[#E5E1DA] dark:border-[#342D28]">
@@ -702,7 +702,22 @@ export default function App() {
                 <li className="flex items-start gap-2.5">
                   <Phone className="w-4 h-4 text-[#1B4332] dark:text-[#74C69D] shrink-0 mt-0.5" aria-hidden="true" />
                   <span className="tabular-nums">
-                    <strong className="font-semibold">Phone / WhatsApp:</strong> {BAKERY_INFO.phoneDisplay}
+                    <strong className="font-semibold">Phone / WhatsApp:</strong>{' '}
+                    <a
+                      href={`tel:+${BAKERY_INFO.whatsappDigits}`}
+                      className="hover:underline underline-offset-4"
+                    >
+                      {BAKERY_INFO.phoneDisplay}
+                    </a>
+                    <span aria-hidden="true" className="mx-2 text-[#57534E] dark:text-[#A8A29E]">
+                      ·
+                    </span>
+                    <a
+                      href={`tel:+${BAKERY_INFO.secondaryPhoneDigits}`}
+                      className="hover:underline underline-offset-4"
+                    >
+                      {BAKERY_INFO.secondaryPhoneDisplay}
+                    </a>
                   </span>
                 </li>
               </ul>
@@ -718,11 +733,18 @@ export default function App() {
                   <ExternalLink className="w-4 h-4" aria-hidden="true" />
                 </a>
                 <a
-                  href={`tel:${BAKERY_INFO.whatsappDigits}`}
-                  className="inline-flex items-center gap-2 bg-white dark:bg-[#1D1916] hover:bg-[#F3F1ED] dark:hover:bg-[#26211D] text-[#1C1815] dark:text-[#F5F2EC] border border-[#E5E1DA] dark:border-[#342D28] text-sm font-medium px-5 py-2.5 rounded-lg transition-colors whitespace-nowrap"
+                  href={`tel:+${BAKERY_INFO.whatsappDigits}`}
+                  className="inline-flex items-center gap-2 bg-white dark:bg-[#1D1916] hover:bg-[#F3F1ED] dark:hover:bg-[#26211D] text-[#1C1815] dark:text-[#F5F2EC] border border-[#E5E1DA] dark:border-[#342D28] text-sm font-medium px-4 py-2.5 rounded-lg transition-colors whitespace-nowrap"
                 >
                   <Phone className="w-4 h-4 text-[#1B4332] dark:text-[#74C69D]" aria-hidden="true" />
-                  <span className="tabular-nums">Call {BAKERY_INFO.phoneDisplay}</span>
+                  <span className="tabular-nums">{BAKERY_INFO.phoneDisplay}</span>
+                </a>
+                <a
+                  href={`tel:+${BAKERY_INFO.secondaryPhoneDigits}`}
+                  className="inline-flex items-center gap-2 bg-white dark:bg-[#1D1916] hover:bg-[#F3F1ED] dark:hover:bg-[#26211D] text-[#1C1815] dark:text-[#F5F2EC] border border-[#E5E1DA] dark:border-[#342D28] text-sm font-medium px-4 py-2.5 rounded-lg transition-colors whitespace-nowrap"
+                >
+                  <Phone className="w-4 h-4 text-[#1B4332] dark:text-[#74C69D]" aria-hidden="true" />
+                  <span className="tabular-nums">{BAKERY_INFO.secondaryPhoneDisplay}</span>
                 </a>
               </div>
             </div>
@@ -730,7 +752,7 @@ export default function App() {
             <div className="w-full h-80 rounded-xl overflow-hidden shadow-xs border border-[#E5E1DA] dark:border-[#342D28] bg-[#F3F1ED] dark:bg-[#26211D]">
               <iframe
                 title="Hot Cake Bakers Kashmir Road Sialkot Location Map"
-                src="https://maps.google.com/maps?q=Kashmir%20Road%20Kotli%20Behram%20Sialkot&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                src="https://maps.google.com/maps?q=Hot%20Cake%20Bakers%20Lari%20Ada%20Kashmir%20Road%20Sialkot&t=&z=15&ie=UTF8&iwloc=&output=embed"
                 className="w-full h-full border-0 dark:brightness-90 dark:contrast-110"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
@@ -750,8 +772,15 @@ export default function App() {
                 {BAKERY_INFO.urduName}
               </span>
             </p>
-            <p className="text-xs font-medium text-[#57534E] dark:text-[#D6D3D1]">
-              {BAKERY_INFO.address} · {BAKERY_INFO.shortHours} · {BAKERY_INFO.phoneDisplay}
+            <p className="text-xs font-medium text-[#57534E] dark:text-[#D6D3D1] tabular-nums">
+              {BAKERY_INFO.address} · {BAKERY_INFO.shortHours} ·{' '}
+              <a href={`tel:+${BAKERY_INFO.whatsappDigits}`} className="hover:underline underline-offset-2">
+                {BAKERY_INFO.phoneDisplay}
+              </a>
+              {' / '}
+              <a href={`tel:+${BAKERY_INFO.secondaryPhoneDigits}`} className="hover:underline underline-offset-2">
+                {BAKERY_INFO.secondaryPhoneDisplay}
+              </a>
             </p>
           </div>
 
