@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { ChevronDown, ChevronUp, RefreshCw } from 'lucide-react';
-import chocolateCakeImg from '../assets/images/product_chocolate_cake_1794557544027.jpg';
-import cakeRuskImg from '../assets/images/product_cake_rusk_1794557545116.jpg';
-import traditionalSweetsImg from '../assets/images/product_traditional_sweets_1794557547576.jpg';
-import halwaPuriImg from '../assets/images/product_halwa_puri_1794557545558.jpg';
+import gajarHalwaImg from '../assets/images/seasonal_gajar_halwa_1794567029278.jpg';
+import winterPinniImg from '../assets/images/seasonal_winter_pinni_1794567030094.jpg';
+import walnutCakeImg from '../assets/images/seasonal_walnut_cake_1794567031075.jpg';
 import { MenuItem, MenuVariant } from '../types/bakery';
 import { ProductCard } from './ProductCard';
 
@@ -14,17 +13,16 @@ interface RawSeasonalItem {
   category: MenuItem['category'];
   availabilityNote: string;
   description: string;
-  imageKey: 'traditionalSweets' | 'cakeRusk' | 'chocolateCake' | 'halwaPuri';
+  imageKey: 'gajarHalwa' | 'winterPinni' | 'walnutCake';
   imageAlt: string;
   variants: MenuVariant[];
   supportsCakeNote?: boolean;
 }
 
 const IMAGE_MAP: Record<RawSeasonalItem['imageKey'], string> = {
-  traditionalSweets: traditionalSweetsImg,
-  cakeRusk: cakeRuskImg,
-  chocolateCake: chocolateCakeImg,
-  halwaPuri: halwaPuriImg,
+  gajarHalwa: gajarHalwaImg,
+  winterPinni: winterPinniImg,
+  walnutCake: walnutCakeImg,
 };
 
 interface SeasonalSpecialsProps {
@@ -32,6 +30,7 @@ interface SeasonalSpecialsProps {
   onAddToCart: (item: MenuItem, variant: MenuVariant) => void;
   onUpdateQuantity: (itemId: string, variantId: string, delta: number) => void;
   onInspectItem: (item: MenuItem, variant: MenuVariant) => void;
+  onOpenCart?: () => void;
   onItemsLoaded?: (items: MenuItem[]) => void;
 }
 
@@ -40,6 +39,7 @@ export const SeasonalSpecials: React.FC<SeasonalSpecialsProps> = ({
   onAddToCart,
   onUpdateQuantity,
   onInspectItem,
+  onOpenCart,
   onItemsLoaded,
 }) => {
   const [isVisible, setIsVisible] = useState(true);
@@ -61,7 +61,7 @@ export const SeasonalSpecials: React.FC<SeasonalSpecialsProps> = ({
         category: entry.category,
         availabilityNote: entry.availabilityNote,
         description: entry.description,
-        image: IMAGE_MAP[entry.imageKey] ?? traditionalSweetsImg,
+        image: IMAGE_MAP[entry.imageKey] ?? gajarHalwaImg,
         imageAlt: entry.imageAlt,
         variants: entry.variants,
         supportsCakeNote: entry.supportsCakeNote,
@@ -79,7 +79,10 @@ export const SeasonalSpecials: React.FC<SeasonalSpecialsProps> = ({
   }, [loadSpecials]);
 
   return (
-    <div className="bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-xl p-5 sm:p-6 space-y-5">
+    <div
+      id="seasonal"
+      className="scroll-mt-24 bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-xl p-5 sm:p-6 space-y-5"
+    >
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <p className="text-xs font-medium text-[#1B4332] dark:text-[#74C69D]">
@@ -107,9 +110,9 @@ export const SeasonalSpecials: React.FC<SeasonalSpecialsProps> = ({
         >
           <span>{isVisible ? 'Hide Seasonal Specials' : 'Show Seasonal Specials'}</span>
           {isVisible ? (
-            <ChevronUp className="w-4 h-4 text-[#5C554E] dark:text-[#B5ACA3]" aria-hidden="true" />
+            <ChevronUp className="w-4 h-4 text-[#57534E] dark:text-[#D6D3D1]" aria-hidden="true" />
           ) : (
-            <ChevronDown className="w-4 h-4 text-[#5C554E] dark:text-[#B5ACA3]" aria-hidden="true" />
+            <ChevronDown className="w-4 h-4 text-[#57534E] dark:text-[#D6D3D1]" aria-hidden="true" />
           )}
         </button>
       </div>
@@ -152,7 +155,7 @@ export const SeasonalSpecials: React.FC<SeasonalSpecialsProps> = ({
           )}
 
           {status === 'ready' && items.length === 0 && (
-            <p className="text-sm text-[#5C554E] dark:text-[#B5ACA3] py-4">
+            <p className="text-sm text-[#57534E] dark:text-[#D6D3D1] py-4">
               No seasonal specials are active right now. Check our main bakery menu below.
             </p>
           )}
@@ -167,6 +170,7 @@ export const SeasonalSpecials: React.FC<SeasonalSpecialsProps> = ({
                   onAddToCart={onAddToCart}
                   onUpdateQuantity={onUpdateQuantity}
                   onInspectItem={onInspectItem}
+                  onOpenCart={onOpenCart}
                 />
               ))}
             </div>

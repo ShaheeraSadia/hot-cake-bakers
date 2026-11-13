@@ -49,14 +49,6 @@ export interface CustomerDetails {
   instructions: string;
 }
 
-export interface CustomerReview {
-  id: string;
-  author: string;
-  area: string;
-  favoriteItem: string;
-  quote: string;
-}
-
 export interface RecentOrder {
   id: string;
   createdAtIso: string;
@@ -64,19 +56,4 @@ export interface RecentOrder {
   items: CartItem[];
   totalPkr: number;
   customerName: string;
-}
-
-export interface LoyaltyTransaction {
-  id: string;
-  dateIso: string;
-  orderTotalPkr: number;
-  pointsEarned: number;
-  summary: string;
-}
-
-export interface LoyaltyState {
-  points: number;
-  lifetimeSpentPkr: number;
-  ordersCount: number;
-  history: LoyaltyTransaction[];
 }

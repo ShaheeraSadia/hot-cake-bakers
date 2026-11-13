@@ -2,25 +2,17 @@ import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { Search, X, Phone, MessageCircle, MapPin, Clock, ArrowRight, ShoppingBag, RotateCcw, ExternalLink } from 'lucide-react';
 import {
   BAKERY_INFO,
-  CUSTOMER_REVIEWS,
   HERO_SLIDES,
   MENU_CATEGORIES,
   MENU_ITEMS,
 } from './data/menuData';
-import { CartItem, LoyaltyState, MenuCategory, MenuItem, MenuVariant, OrderType, RecentOrder } from './types/bakery';
-import {
-  calculateOrderPoints,
-  DEFAULT_LOYALTY_STATE,
-  loadLoyaltyState,
-  saveLoyaltyState,
-} from './utils/loyaltyRewards';
+import { CartItem, MenuCategory, MenuItem, MenuVariant, OrderType, RecentOrder } from './types/bakery';
 import { Header } from './components/Header';
 import { HeroCarousel } from './components/HeroCarousel';
 import { SeasonalSpecials } from './components/SeasonalSpecials';
 import { ProductCard } from './components/ProductCard';
 import { ItemDetailModal } from './components/ItemDetailModal';
 import { CartDrawer } from './components/CartDrawer';
-import { LoyaltyModal } from './components/LoyaltyModal';
 import { ResilientImage } from './components/ResilientImage';
 
 const CART_STORAGE_KEY = 'hot_cake_bakers_sialkot_cart_v1';
@@ -50,9 +42,7 @@ export default function App() {
   });
   const [orderType, setOrderType] = useState<OrderType>('delivery');
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isLoyaltyOpen, setIsLoyaltyOpen] = useState(false);
   const [isLocationImageOpen, setIsLocationImageOpen] = useState(false);
-  const [loyalty, setLoyalty] = useState<LoyaltyState>(() => loadLoyaltyState());
   const [seasonalItems, setSeasonalItems] = useState<MenuItem[]>([]);
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     try {
@@ -93,10 +83,6 @@ export default function App() {
       // Ignore storage quota errors
     }
   }, [recentOrders]);
-
-  useEffect(() => {
-    saveLoyaltyState(loyalty);
-  }, [loyalty]);
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark');
@@ -249,31 +235,6 @@ export default function App() {
       ...order,
     };
     setRecentOrders((prev) => [nextEntry, ...prev].slice(0, MAX_RECENT_ORDERS));
-
-    const earnedPoints = calculateOrderPoints(order.totalPkr);
-    const itemSummary = order.items
-      .map((i) => `${i.name} ×${i.quantity}`)
-      .join(', ');
-
-    setLoyalty((prev) => ({
-      points: prev.points + earnedPoints,
-      lifetimeSpentPkr: prev.lifetimeSpentPkr + order.totalPkr,
-      ordersCount: prev.ordersCount + 1,
-      history: [
-        {
-          id: `loy_${Date.now()}`,
-          dateIso: nowIso,
-          orderTotalPkr: order.totalPkr,
-          pointsEarned: earnedPoints,
-          summary: itemSummary,
-        },
-        ...prev.history,
-      ].slice(0, 20),
-    }));
-  };
-
-  const handleResetLoyalty = () => {
-    setLoyalty(DEFAULT_LOYALTY_STATE);
   };
 
   const handleReorder = (order: RecentOrder) => {
@@ -321,7 +282,10 @@ export default function App() {
   )}`;
 
   return (
-    <div id="top" className="min-h-screen flex flex-col bg-[#FAF9F7] dark:bg-[#141210] text-[#1C1815] dark:text-[#F5F2EC] transition-colors duration-200">
+    <div
+      id="top"
+      className="min-h-screen flex flex-col bg-[#FAF9F7] dark:bg-[#141210] text-[#1C1815] dark:text-[#F5F2EC] transition-colors duration-200"
+    >
       {showTopNotice && (
         <div className="bg-[#1B4332] text-white text-xs h-9 px-4 flex items-center justify-center relative">
           <p className="truncate pr-6 text-center">
@@ -344,11 +308,9 @@ export default function App() {
 
       <Header
         totalItems={totalItems}
-        loyaltyPoints={loyalty.points}
         theme={theme}
         onToggleTheme={() => setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'))}
         onOpenCart={() => setIsCartOpen(true)}
-        onOpenLoyalty={() => setIsLoyaltyOpen(true)}
       />
 
       <main className="flex-1">
@@ -358,15 +320,15 @@ export default function App() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch">
               <div className="lg:col-span-6 flex flex-col justify-center gap-6">
                 <div className="space-y-3">
-                  <p className="text-xs font-medium tracking-wide text-[#5C554E] dark:text-[#B5ACA3]">
+                  <p className="text-xs font-medium tracking-wide text-[#57534E] dark:text-[#D6D3D1]">
                     Kashmir Road, Kotli Behram, Sialkot
                     <span aria-hidden="true" className="mx-2">
                       ·
                     </span>
-                    Open till 1:30 AM
+                    Takeout &amp; Delivery
                   </p>
                   <h1 className="font-display text-4xl sm:text-5xl font-semibold text-[#1C1815] dark:text-[#F5F2EC] leading-[1.12] tracking-tight text-balance">
-                    Freshly baked cakes, savories, and Sialkot sweets until 1:30 AM.
+                    Freshly baked cakes, savories, and Sialkot sweets.
                   </h1>
                   <p
                     className="font-urdu text-xl sm:text-2xl text-[#1B4332] dark:text-[#74C69D] pt-1"
@@ -377,8 +339,8 @@ export default function App() {
                   </p>
                 </div>
 
-                <p className="text-base text-[#5C554E] dark:text-[#B5ACA3] leading-relaxed max-w-xl">
-                  From morning Halwa Puri platters and golden tea-time cake rusk to late-night chicken pizza, crispy chicken samosas, celebration cakes, and pure khoya mithai—order directly for takeout or delivery across Sialkot.
+                <p className="text-base text-[#44403C] dark:text-[#D6D3D1] leading-relaxed max-w-xl">
+                  From morning Halwa Puri platters and golden tea-time cake rusk to evening chicken pizza, crispy chicken samosas, celebration cakes, and pure khoya mithai—order directly via WhatsApp for pickup or delivery across Sialkot.
                 </p>
 
                 <div className="flex flex-wrap items-center gap-4 pt-1">
@@ -410,25 +372,25 @@ export default function App() {
 
             <div className="mt-10 pt-8 border-t border-[#E5E1DA] dark:border-[#342D28] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               <div>
-                <p className="text-xs font-medium text-[#5C554E] dark:text-[#B5ACA3]">Bakery Hours</p>
-                <p className="text-sm font-semibold text-[#1C1815] dark:text-[#F5F2EC] mt-1 tabular-nums">
-                  {BAKERY_INFO.hoursDisplay}
+                <p className="text-xs font-medium text-[#57534E] dark:text-[#D6D3D1]">Daily Schedule</p>
+                <p className="text-sm font-semibold text-[#1C1815] dark:text-[#F5F2EC] mt-1">
+                  Fresh Batches All Day
                 </p>
               </div>
               <div>
-                <p className="text-xs font-medium text-[#5C554E] dark:text-[#B5ACA3]">Fulfillment</p>
+                <p className="text-xs font-medium text-[#57534E] dark:text-[#D6D3D1]">Fulfillment</p>
                 <p className="text-sm font-semibold text-[#1C1815] dark:text-[#F5F2EC] mt-1">
                   Takeout &amp; Sialkot Delivery
                 </p>
               </div>
               <div>
-                <p className="text-xs font-medium text-[#5C554E] dark:text-[#B5ACA3]">Popular Specialties</p>
+                <p className="text-xs font-medium text-[#57534E] dark:text-[#D6D3D1]">Popular Specialties</p>
                 <p className="text-sm font-semibold text-[#1C1815] dark:text-[#F5F2EC] mt-1">
                   Cakes, Rusk, Halwa Puri &amp; Pizza
                 </p>
               </div>
               <div>
-                <p className="text-xs font-medium text-[#5C554E] dark:text-[#B5ACA3]">Direct WhatsApp Desk</p>
+                <p className="text-xs font-medium text-[#57534E] dark:text-[#D6D3D1]">Direct WhatsApp Desk</p>
                 <p className="text-sm font-semibold text-[#1C1815] dark:text-[#F5F2EC] mt-1 tabular-nums">
                   {BAKERY_INFO.phoneDisplay}
                 </p>
@@ -442,7 +404,7 @@ export default function App() {
           <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div>
-                <p className="text-xs font-medium text-[#5C554E] dark:text-[#B5ACA3]">
+                <p className="text-xs font-medium text-[#57534E] dark:text-[#D6D3D1]">
                   Freshly Prepared Daily · Cash on Delivery &amp; Pickup
                 </p>
                 <h2 className="font-display text-3xl font-semibold text-[#1C1815] dark:text-[#F5F2EC] mt-1 text-balance">
@@ -452,7 +414,7 @@ export default function App() {
 
               <div className="relative w-full md:w-72">
                 <Search
-                  className="w-4 h-4 text-[#5C554E] dark:text-[#B5ACA3] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
+                  className="w-4 h-4 text-[#57534E] dark:text-[#D6D3D1] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
                   aria-hidden="true"
                 />
                 <input
@@ -461,18 +423,22 @@ export default function App() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search cakes, samosa, halwa puri..."
                   aria-label="Search menu items"
-                  className="w-full pl-10 pr-4 py-2.5 text-sm bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-lg text-[#1C1815] dark:text-[#F5F2EC] placeholder:text-[#8C847B] dark:placeholder:text-[#8E857D] focus:outline-none focus:border-[#1B4332] dark:focus:border-[#52B788]"
+                  className="w-full pl-10 pr-4 py-2.5 text-sm bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-lg text-[#1C1815] dark:text-[#F5F2EC] placeholder:text-[#57534E] dark:placeholder:text-[#A8A29E] focus:outline-none focus:border-[#1B4332] dark:focus:border-[#52B788]"
                 />
               </div>
             </div>
 
             <SeasonalSpecials
               getCartQuantity={getCartQuantity}
-              onAddToCart={(menuItem, variant) => addToCart(menuItem, variant, 1)}
+              onAddToCart={(menuItem, variant) => {
+                addToCart(menuItem, variant, 1);
+                setIsCartOpen(true);
+              }}
               onUpdateQuantity={updateItemVariantQuantity}
               onInspectItem={(menuItem, variant) =>
                 setInspectedItem({ item: menuItem, variant })
               }
+              onOpenCart={() => setIsCartOpen(true)}
               onItemsLoaded={handleSeasonalItemsLoaded}
             />
 
@@ -483,14 +449,14 @@ export default function App() {
                     <h3 className="text-sm font-semibold text-[#1C1815] dark:text-[#F5F2EC]">
                       Recent Orders
                     </h3>
-                    <p className="text-xs text-[#5C554E] dark:text-[#B5ACA3] mt-0.5">
+                    <p className="text-xs text-[#57534E] dark:text-[#D6D3D1] mt-0.5">
                       Quickly re-order your previous items saved on this device
                     </p>
                   </div>
                   <button
                     type="button"
                     onClick={handleClearRecentOrders}
-                    className="text-xs text-[#5C554E] dark:text-[#B5ACA3] hover:text-[#1C1815] dark:hover:text-[#F5F2EC] underline underline-offset-2 whitespace-nowrap shrink-0 cursor-pointer"
+                    className="text-xs font-medium text-[#57534E] dark:text-[#D6D3D1] hover:text-[#1C1815] dark:hover:text-[#F5F2EC] underline underline-offset-2 whitespace-nowrap shrink-0 cursor-pointer"
                   >
                     Clear History
                   </button>
@@ -517,7 +483,7 @@ export default function App() {
                         className="flex flex-col justify-between gap-3 p-4 rounded-lg bg-[#FAF9F7] dark:bg-[#26211D] border border-[#E5E1DA] dark:border-[#342D28]"
                       >
                         <div className="space-y-1.5">
-                          <div className="flex items-center justify-between gap-2 text-xs text-[#5C554E] dark:text-[#B5ACA3]">
+                          <div className="flex items-center justify-between gap-2 text-xs text-[#57534E] dark:text-[#D6D3D1]">
                             <span className="tabular-nums truncate">
                               {formattedDate} · {formattedTime}
                             </span>
@@ -528,7 +494,7 @@ export default function App() {
                           <p className="text-sm font-medium text-[#1C1815] dark:text-[#F5F2EC] line-clamp-2 leading-snug">
                             {previewSummary}
                           </p>
-                          <p className="text-xs text-[#5C554E] dark:text-[#B5ACA3]">
+                          <p className="text-xs text-[#57534E] dark:text-[#D6D3D1]">
                             {order.orderType === 'delivery' ? 'Sialkot Delivery' : 'Store Takeout'}
                             <span aria-hidden="true" className="mx-1.5">
                               ·
@@ -572,7 +538,7 @@ export default function App() {
                       className={`px-3.5 py-2 text-xs font-medium rounded-lg transition-colors duration-150 whitespace-nowrap shrink-0 cursor-pointer min-h-[40px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1B4332] dark:focus-visible:outline-[#52B788] ${
                         isActive
                           ? 'bg-[#1B4332] text-white'
-                          : 'bg-[#F3F1ED] dark:bg-[#26211D] text-[#5C554E] dark:text-[#B5ACA3] hover:text-[#1C1815] dark:hover:text-[#F5F2EC] hover:bg-[#EAE6DE] dark:hover:bg-[#342D28]'
+                          : 'bg-[#F3F1ED] dark:bg-[#26211D] text-[#44403C] dark:text-[#D6D3D1] hover:text-[#1C1815] dark:hover:text-[#F5F2EC] hover:bg-[#EAE6DE] dark:hover:bg-[#342D28]'
                       }`}
                     >
                       {category}
@@ -581,7 +547,7 @@ export default function App() {
                 })}
               </div>
 
-              <p className="text-xs text-[#5C554E] dark:text-[#B5ACA3] whitespace-nowrap tabular-nums">
+              <p className="text-xs font-medium text-[#57534E] dark:text-[#D6D3D1] whitespace-nowrap tabular-nums">
                 Showing {filteredItems.length} of {MENU_ITEMS.length} items
               </p>
             </div>
@@ -591,7 +557,7 @@ export default function App() {
                 <p className="font-display text-xl text-[#1C1815] dark:text-[#F5F2EC]">
                   No items match &ldquo;{searchQuery}&rdquo;
                 </p>
-                <p className="text-sm text-[#5C554E] dark:text-[#B5ACA3]">
+                <p className="text-sm text-[#57534E] dark:text-[#D6D3D1]">
                   Try clearing your search or switching back to all bakery categories.
                 </p>
                 <button
@@ -612,11 +578,15 @@ export default function App() {
                     key={item.id}
                     item={item}
                     getCartQuantity={getCartQuantity}
-                    onAddToCart={(menuItem, variant) => addToCart(menuItem, variant, 1)}
+                    onAddToCart={(menuItem, variant) => {
+                      addToCart(menuItem, variant, 1);
+                      setIsCartOpen(true);
+                    }}
                     onUpdateQuantity={updateItemVariantQuantity}
                     onInspectItem={(menuItem, variant) =>
                       setInspectedItem({ item: menuItem, variant })
                     }
+                    onOpenCart={() => setIsCartOpen(true)}
                   />
                 ))}
               </div>
@@ -624,27 +594,27 @@ export default function App() {
           </div>
         </section>
 
-        {/* Section 3: Craftsmanship & Sialkot Customer Reviews */}
+        {/* Section 3: Craftsmanship & Kashmir Road Counter */}
         <section
           id="specialties"
           className="scroll-mt-24 bg-white dark:bg-[#1D1916] border-t border-b border-[#E5E1DA] dark:border-[#342D28] py-12 lg:py-16"
         >
-          <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
+          <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
               <div className="lg:col-span-5">
                 <button
                   type="button"
                   onClick={() => setIsLocationImageOpen(true)}
                   className="group relative w-full h-[280px] sm:h-[340px] lg:h-[380px] rounded-xl overflow-hidden border border-[#E5E1DA] dark:border-[#342D28] bg-[#F3F1ED] dark:bg-[#26211D] block text-left cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1B4332] dark:focus-visible:outline-[#52B788]"
-                  aria-label="Enlarge Hot Cake Bakers Halwa Puri and Kashmir Road counter showcase photo"
+                  aria-label="Enlarge Hot Cake Bakers Kashmir Road counter display photo"
                 >
                   <ResilientImage
                     src={BAKERY_INFO.secondaryShowcaseImage}
-                    alt="Morning Halwa Puri breakfast platter freshly served at Hot Cake Bakers Sialkot"
-                    fallbackTitle="Sialkoti Halwa Puri & Bakery Specialties"
+                    alt="Hot Cake Bakers Kashmir Road counter display with celebration cakes, puff patties, and mithai"
+                    fallbackTitle="Kashmir Road Bakery Counter"
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                   />
-                  <span className="absolute bottom-3 right-3 bg-black/65 text-white text-xs font-medium px-3 py-1.5 rounded-lg backdrop-blur-xs">
+                  <span className="absolute bottom-3 right-3 bg-black/70 text-white text-xs font-medium px-3 py-1.5 rounded-lg backdrop-blur-xs">
                     View Full Photo
                   </span>
                 </button>
@@ -660,8 +630,8 @@ export default function App() {
                   </h2>
                 </div>
 
-                <p className="text-base text-[#5C554E] dark:text-[#B5ACA3] leading-relaxed">
-                  Situated on Kashmir Road near Lari Adda in Kotli Behram, Hot Cake Bakers pairs traditional Sialkoti breakfast and mithai craftsmanship with an active late-night oven running until 1:30 AM.
+                <p className="text-base text-[#44403C] dark:text-[#D6D3D1] leading-relaxed">
+                  Situated on Kashmir Road near Lari Adda in Kotli Behram, Hot Cake Bakers pairs traditional Sialkoti breakfast and mithai craftsmanship with fresh evening baking for takeout and home delivery.
                 </p>
 
                 <div className="flex flex-wrap items-center gap-3 pt-1">
@@ -681,42 +651,16 @@ export default function App() {
                     <MapPin className="w-4 h-4 text-[#1B4332] dark:text-[#74C69D]" aria-hidden="true" />
                     <span>View Map &amp; Directions</span>
                   </a>
-                </div>
-              </div>
-            </div>
-
-            <div id="reviews" className="scroll-mt-24 pt-10 border-t border-[#E5E1DA] dark:border-[#342D28] space-y-6">
-              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
-                <div>
-                  <p className="text-xs font-medium text-[#5C554E] dark:text-[#B5ACA3]">
-                    Sialkot Local Favorites
-                  </p>
-                  <h3 className="font-display text-2xl font-semibold text-[#1C1815] dark:text-[#F5F2EC] mt-1">
-                    What neighborhood regulars order most
-                  </h3>
-                </div>
-                <p className="text-xs text-[#5C554E] dark:text-[#B5ACA3]">
-                  Kashmir Road · Kotli Behram · Model Town
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {CUSTOMER_REVIEWS.map((review) => (
-                  <blockquote
-                    key={review.id}
-                    className="bg-[#FAF9F7] dark:bg-[#26211D] border border-[#E5E1DA] dark:border-[#342D28] rounded-xl p-6 flex flex-col justify-between gap-4"
+                  <a
+                    href={BAKERY_INFO.googleMapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-sm font-medium text-[#1B4332] dark:text-[#74C69D] hover:underline underline-offset-4 px-2 py-2 whitespace-nowrap"
                   >
-                    <p className="text-sm text-[#1C1815] dark:text-[#F5F2EC] leading-relaxed">
-                      &ldquo;{review.quote}&rdquo;
-                    </p>
-                    <footer className="pt-3 border-t border-[#E5E1DA] dark:border-[#342D28] text-xs">
-                      <p className="font-semibold text-[#1C1815] dark:text-[#F5F2EC]">{review.author}</p>
-                      <p className="text-[#5C554E] dark:text-[#B5ACA3] mt-0.5">
-                        {review.area} · {review.favoriteItem}
-                      </p>
-                    </footer>
-                  </blockquote>
-                ))}
+                    <span>View on Google</span>
+                    <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -738,8 +682,8 @@ export default function App() {
                 </h2>
               </div>
 
-              <p className="text-sm text-[#5C554E] dark:text-[#B5ACA3] leading-relaxed">
-                Located near Lari Adda on Main Kashmir Road, Sialkot. Stop by for fresh counter takeout, morning Halwa Puri, or custom celebration cakes until 1:30 AM.
+              <p className="text-sm text-[#44403C] dark:text-[#D6D3D1] leading-relaxed">
+                Located near Lari Adda on Main Kashmir Road, Sialkot. Stop by for fresh counter takeout, morning Halwa Puri, or custom celebration cakes.
               </p>
 
               <ul className="space-y-3 text-sm text-[#1C1815] dark:text-[#F5F2EC] pt-2 border-t border-[#E5E1DA] dark:border-[#342D28]">
@@ -752,7 +696,7 @@ export default function App() {
                 <li className="flex items-start gap-2.5">
                   <Clock className="w-4 h-4 text-[#1B4332] dark:text-[#74C69D] shrink-0 mt-0.5" aria-hidden="true" />
                   <span className="tabular-nums">
-                    <strong className="font-semibold">Opening Hours:</strong> Open Daily · Closes 1:30 AM
+                    <strong className="font-semibold">Opening Hours:</strong> {BAKERY_INFO.hoursDisplay}
                   </span>
                 </li>
                 <li className="flex items-start gap-2.5">
@@ -765,9 +709,7 @@ export default function App() {
 
               <div className="flex flex-wrap items-center gap-3 pt-1">
                 <a
-                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                    'Hot Cake Bakers Kashmir Road Kotli Behram Sialkot 51310'
-                  )}`}
+                  href={BAKERY_INFO.googleMapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 bg-[#1B4332] hover:bg-[#143325] text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors whitespace-nowrap"
@@ -804,16 +746,16 @@ export default function App() {
           <div className="space-y-1">
             <p className="font-display text-lg font-semibold text-[#1C1815] dark:text-[#F5F2EC]">
               {BAKERY_INFO.name}{' '}
-              <span className="font-urdu text-base font-normal text-[#5C554E] dark:text-[#B5ACA3] ms-2" lang="ur">
+              <span className="font-urdu text-base font-normal text-[#57534E] dark:text-[#D6D3D1] ms-2" lang="ur">
                 {BAKERY_INFO.urduName}
               </span>
             </p>
-            <p className="text-xs text-[#5C554E] dark:text-[#B5ACA3]">
+            <p className="text-xs font-medium text-[#57534E] dark:text-[#D6D3D1]">
               {BAKERY_INFO.address} · {BAKERY_INFO.shortHours} · {BAKERY_INFO.phoneDisplay}
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-6 text-xs font-medium text-[#5C554E] dark:text-[#B5ACA3]">
+          <div className="flex flex-wrap items-center gap-6 text-xs font-medium text-[#57534E] dark:text-[#D6D3D1]">
             <a href="#menu" className="hover:text-[#1C1815] dark:hover:text-[#F5F2EC] transition-colors">
               Full Menu
             </a>
@@ -828,14 +770,14 @@ export default function App() {
             >
               WhatsApp Order
             </a>
-            <span className="text-[#8C847B] dark:text-[#8E857D]">
+            <span className="text-[#57534E] dark:text-[#A8A29E]">
               © {new Date().getFullYear()} {BAKERY_INFO.name}
             </span>
           </div>
         </div>
       </footer>
 
-      {/* Mobile Bottom Bag Bar (strictly < 15% mobile viewport height, only shown when items exist) */}
+      {/* Mobile Bottom Bag Bar */}
       {totalItems > 0 && !isCartOpen && (
         <div className="md:hidden fixed bottom-3 inset-x-4 z-30">
           <button
@@ -879,13 +821,6 @@ export default function App() {
         onClearCart={() => setCart([])}
       />
 
-      <LoyaltyModal
-        isOpen={isLoyaltyOpen}
-        onClose={() => setIsLoyaltyOpen(false)}
-        loyalty={loyalty}
-        onResetLoyalty={handleResetLoyalty}
-      />
-
       {isLocationImageOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1C1815]/75 dark:bg-black/80 backdrop-blur-xs"
@@ -903,14 +838,14 @@ export default function App() {
                 <h2 id="location-modal-title" className="font-display text-lg font-semibold text-[#1C1815] dark:text-[#F5F2EC]">
                   {BAKERY_INFO.name} — Kashmir Road Counter
                 </h2>
-                <p className="text-xs text-[#5C554E] dark:text-[#B5ACA3] mt-0.5">
-                  {BAKERY_INFO.address} · {BAKERY_INFO.shortHours}
+                <p className="text-xs text-[#57534E] dark:text-[#D6D3D1] mt-0.5">
+                  {BAKERY_INFO.address} · {BAKERY_INFO.services}
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setIsLocationImageOpen(false)}
-                className="p-2 text-[#5C554E] dark:text-[#B5ACA3] hover:text-[#1C1815] dark:hover:text-[#F5F2EC] hover:bg-[#F3F1ED] dark:hover:bg-[#26211D] rounded-lg transition-colors cursor-pointer min-w-[40px] min-h-[40px] flex items-center justify-center"
+                className="p-2 text-[#57534E] dark:text-[#D6D3D1] hover:text-[#1C1815] dark:hover:text-[#F5F2EC] hover:bg-[#F3F1ED] dark:hover:bg-[#26211D] rounded-lg transition-colors cursor-pointer min-w-[40px] min-h-[40px] flex items-center justify-center"
                 aria-label="Close location photo"
               >
                 <X className="w-5 h-5" aria-hidden="true" />
@@ -919,19 +854,17 @@ export default function App() {
             <div className="bg-[#F3F1ED] dark:bg-[#26211D] max-h-[70vh] overflow-hidden">
               <ResilientImage
                 src={BAKERY_INFO.secondaryShowcaseImage}
-                alt="Hot Cake Bakers Kashmir Road Sialkot Halwa Puri and bakery specialties"
+                alt="Hot Cake Bakers Kashmir Road Sialkot counter display"
                 fallbackTitle={BAKERY_INFO.address}
                 className="w-full h-full max-h-[70vh] object-cover"
               />
             </div>
             <div className="px-5 py-3.5 bg-[#FAF9F7] dark:bg-[#26211D] border-t border-[#E5E1DA] dark:border-[#342D28] flex flex-wrap items-center justify-between gap-3">
-              <span className="text-xs text-[#5C554E] dark:text-[#B5ACA3]">
+              <span className="text-xs text-[#57534E] dark:text-[#D6D3D1]">
                 Kashmir Road near Lari Adda, Kotli Behram, Sialkot
               </span>
               <a
-                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                  'Hot Cake Bakers Kashmir Road Kotli Behram Sialkot 51310'
-                )}`}
+                href={BAKERY_INFO.googleMapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1B4332] dark:text-[#74C69D] hover:underline underline-offset-4"

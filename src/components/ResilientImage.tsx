@@ -21,7 +21,7 @@ export const ResilientImage: React.FC<ResilientImageProps> = ({
   if (hasError || !src) {
     return (
       <div
-        className={`flex flex-col items-center justify-center bg-gradient-to-br from-[#F3F0EA] to-[#E6E0D6] dark:from-[#26211D] dark:to-[#1D1916] text-[#5C554E] dark:text-[#B5ACA3] p-6 text-center ${className}`}
+        className={`flex flex-col items-center justify-center bg-gradient-to-br from-[#F3F0EA] to-[#E6E0D6] dark:from-[#26211D] dark:to-[#1D1916] text-[#57534E] dark:text-[#D6D3D1] p-6 text-center ${className}`}
         role="img"
         aria-label={alt}
       >

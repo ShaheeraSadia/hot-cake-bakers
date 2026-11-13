@@ -1,22 +1,18 @@
 import React from 'react';
-import { Award, Moon, ShoppingBag, Sun } from 'lucide-react';
+import { Moon, ShoppingBag, Sun } from 'lucide-react';
 
 interface HeaderProps {
   totalItems: number;
-  loyaltyPoints: number;
   theme: 'light' | 'dark';
   onToggleTheme: () => void;
   onOpenCart: () => void;
-  onOpenLoyalty: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   totalItems,
-  loyaltyPoints,
   theme,
   onToggleTheme,
   onOpenCart,
-  onOpenLoyalty,
 }) => {
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     const target = document.getElementById(id);
@@ -39,7 +35,7 @@ export const Header: React.FC<HeaderProps> = ({
 
         <nav
           aria-label="Primary navigation"
-          className="hidden md:flex items-center gap-7 text-sm font-medium text-[#5C554E] dark:text-[#B5ACA3]"
+          className="hidden md:flex items-center gap-7 text-sm font-medium text-[#44403C] dark:text-[#D6D3D1]"
         >
           <a
             href="#menu"
@@ -49,11 +45,18 @@ export const Header: React.FC<HeaderProps> = ({
             Menu
           </a>
           <a
+            href="#seasonal"
+            onClick={(e) => handleNavClick(e, 'seasonal')}
+            className="hover:text-[#1C1815] dark:hover:text-[#F5F2EC] hover:underline underline-offset-4 transition-colors duration-150 whitespace-nowrap shrink-0 py-1 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1B4332]"
+          >
+            Specials
+          </a>
+          <a
             href="#specialties"
             onClick={(e) => handleNavClick(e, 'specialties')}
             className="hover:text-[#1C1815] dark:hover:text-[#F5F2EC] hover:underline underline-offset-4 transition-colors duration-150 whitespace-nowrap shrink-0 py-1 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1B4332]"
           >
-            Specialties
+            Craft
           </a>
           <a
             href="#location"
@@ -61,13 +64,6 @@ export const Header: React.FC<HeaderProps> = ({
             className="hover:text-[#1C1815] dark:hover:text-[#F5F2EC] hover:underline underline-offset-4 transition-colors duration-150 whitespace-nowrap shrink-0 py-1 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1B4332]"
           >
             Location
-          </a>
-          <a
-            href="#reviews"
-            onClick={(e) => handleNavClick(e, 'reviews')}
-            className="hover:text-[#1C1815] dark:hover:text-[#F5F2EC] hover:underline underline-offset-4 transition-colors duration-150 whitespace-nowrap shrink-0 py-1 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1B4332]"
-          >
-            Reviews
           </a>
         </nav>
 
@@ -82,19 +78,8 @@ export const Header: React.FC<HeaderProps> = ({
             {theme === 'dark' ? (
               <Sun className="w-4 h-4 text-[#F3C669]" aria-hidden="true" />
             ) : (
-              <Moon className="w-4 h-4 text-[#5C554E]" aria-hidden="true" />
+              <Moon className="w-4 h-4 text-[#44403C]" aria-hidden="true" />
             )}
-          </button>
-
-          <button
-            type="button"
-            onClick={onOpenLoyalty}
-            className="inline-flex items-center gap-1.5 bg-white dark:bg-[#1D1916] hover:bg-[#F3F1ED] dark:hover:bg-[#26211D] text-[#1C1815] dark:text-[#F5F2EC] border border-[#E5E1DA] dark:border-[#342D28] text-xs font-medium px-3 h-10 rounded-lg transition-colors duration-150 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1B4332]"
-            aria-label={`View Loyalty Rewards (${loyaltyPoints} points)`}
-          >
-            <Award className="w-3.5 h-3.5 text-[#1B4332] dark:text-[#74C69D] shrink-0" aria-hidden="true" />
-            <span className="hidden sm:inline text-[#5C554E] dark:text-[#B5ACA3]">Rewards ·</span>
-            <span className="tabular-nums font-semibold">{loyaltyPoints} pts</span>
           </button>
 
           <button

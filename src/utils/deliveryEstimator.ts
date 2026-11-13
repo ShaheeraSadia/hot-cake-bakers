@@ -81,8 +81,8 @@ export function calculateDeliveryEstimate(
     const durationText = `${minLead}–${maxLead} mins`;
 
     const statusLabel = isClosingSoon
-      ? 'Closing Soon · Open till 1:30 AM'
-      : 'Open Now · Active till 1:30 AM';
+      ? 'Closing Soon · Order Now'
+      : 'Open Now · Kitchen Active';
 
     const headline =
       orderType === 'delivery'

@@ -3,7 +3,6 @@ import { X, Minus, Plus, Trash2, MessageCircle, Copy, Check, ArrowRight, Clock, 
 import { BAKERY_INFO } from '../data/menuData';
 import { CartItem, CustomerDetails, OrderType, RecentOrder } from '../types/bakery';
 import { calculateDeliveryEstimate } from '../utils/deliveryEstimator';
-import { calculateOrderPoints } from '../utils/loyaltyRewards';
 import { ResilientImage } from './ResilientImage';
 
 const CUSTOMER_STORAGE_KEY = 'hot_cake_bakers_sialkot_customer_v1';
@@ -103,46 +102,39 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   );
 
   const formattedWhatsAppText = useMemo(() => {
+    const modeLabel = orderType === 'delivery' ? 'Delivery' : 'Pickup';
+    const locationValue =
+      orderType === 'delivery'
+        ? customer.address.trim() || 'Sialkot'
+        : 'Pickup (Kashmir Road Counter)';
+
     const lines: string[] = [
-      `*New Order — ${BAKERY_INFO.name}*`,
-      `(${BAKERY_INFO.urduName})`,
-      `Order Type: ${orderType === 'delivery' ? 'Home Delivery (Sialkot)' : 'Store Takeout (Kashmir Road)'}`,
-      `${deliveryEstimate.headline}`,
-      '',
-      '*Items Ordered:*',
+      "Assalam o Alaikum, I'd like to order:",
+      ...items.map((item) => {
+        const lineTotal = item.unitPricePkr * item.quantity;
+        const itemLine = `• ${item.quantity} × ${item.name} (${item.variantLabel}) – Rs. ${lineTotal.toLocaleString()}`;
+        return item.note ? `${itemLine}\n  Note: ${item.note}` : itemLine;
+      }),
     ];
 
-    items.forEach((item, idx) => {
-      const lineTotal = item.unitPricePkr * item.quantity;
-      lines.push(
-        `${idx + 1}. ${item.name} (${item.variantLabel}) x${item.quantity} — Rs. ${lineTotal.toLocaleString()}`
-      );
-      if (item.note) {
-        lines.push(`   Note: ${item.note}`);
-      }
-    });
-
-    lines.push('');
-    lines.push(`Subtotal: Rs. ${subtotalPkr.toLocaleString()}`);
     if (orderType === 'delivery') {
       lines.push(
         `Delivery Fee: ${deliveryFeePkr === 0 ? 'FREE' : `Rs. ${deliveryFeePkr}`}`
       );
     }
-    lines.push(`*Total Payable (Cash on ${orderType === 'delivery' ? 'Delivery' : 'Pickup'}): Rs. ${grandTotalPkr.toLocaleString()}*`);
-    lines.push('');
-    lines.push('*Customer Details:*');
+
+    lines.push(`Total: Rs. ${grandTotalPkr.toLocaleString()}`);
+    lines.push(`${modeLabel}: ${locationValue}`);
     lines.push(`Name: ${customer.name.trim() || 'Guest'}`);
-    lines.push(`Phone: ${customer.phone.trim() || 'Not provided'}`);
-    if (orderType === 'delivery') {
-      lines.push(`Address: ${customer.address.trim() || 'Sialkot'}`);
+    if (customer.phone.trim()) {
+      lines.push(`Phone: ${customer.phone.trim()}`);
     }
     if (customer.instructions.trim()) {
       lines.push(`Instructions: ${customer.instructions.trim()}`);
     }
 
     return lines.join('\n');
-  }, [items, orderType, subtotalPkr, deliveryFeePkr, grandTotalPkr, customer, deliveryEstimate]);
+  }, [items, orderType, deliveryFeePkr, grandTotalPkr, customer]);
 
   const whatsappUrl = useMemo(() => {
     return `https://wa.me/${BAKERY_INFO.whatsappDigits}?text=${encodeURIComponent(
@@ -220,14 +212,14 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             <h2 id="cart-drawer-title" className="font-display text-xl font-semibold text-[#1C1815] dark:text-[#F5F2EC]">
               Your Bakery Bag
             </h2>
-            <p className="text-xs text-[#5C554E] dark:text-[#B5ACA3] mt-0.5">
+            <p className="text-xs text-[#57534E] dark:text-[#D6D3D1] mt-0.5">
               Direct WhatsApp Checkout · {BAKERY_INFO.phoneDisplay}
             </p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-2 text-[#5C554E] dark:text-[#B5ACA3] hover:text-[#1C1815] dark:hover:text-[#F5F2EC] hover:bg-[#F3F1ED] dark:hover:bg-[#26211D] rounded-lg transition-colors cursor-pointer min-w-[40px] min-h-[40px] flex items-center justify-center"
+            className="p-2 text-[#57534E] dark:text-[#D6D3D1] hover:text-[#1C1815] dark:hover:text-[#F5F2EC] hover:bg-[#F3F1ED] dark:hover:bg-[#26211D] rounded-lg transition-colors cursor-pointer min-w-[40px] min-h-[40px] flex items-center justify-center"
             aria-label="Close bag drawer"
           >
             <X className="w-5 h-5" aria-hidden="true" />
@@ -239,7 +231,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             <div className="py-10 space-y-8">
               <div className="text-center space-y-3">
                 <p className="font-display text-xl text-[#1C1815] dark:text-[#F5F2EC]">Your bag is empty</p>
-                <p className="text-sm text-[#5C554E] dark:text-[#B5ACA3] max-w-xs mx-auto">
+                <p className="text-sm text-[#57534E] dark:text-[#D6D3D1] max-w-xs mx-auto">
                   Add fresh cakes, pastries, cake rusk, halwa puri, chicken samosas, or pizza to prepare a WhatsApp order.
                 </p>
                 <button
@@ -261,7 +253,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     <button
                       type="button"
                       onClick={onClearRecentOrders}
-                      className="text-xs text-[#5C554E] dark:text-[#B5ACA3] hover:text-[#1C1815] dark:hover:text-[#F5F2EC] underline underline-offset-2 cursor-pointer"
+                      className="text-xs text-[#57534E] dark:text-[#D6D3D1] hover:text-[#1C1815] dark:hover:text-[#F5F2EC] underline underline-offset-2 cursor-pointer"
                     >
                       Clear History
                     </button>
@@ -283,7 +275,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                           key={order.id}
                           className="bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-xl p-4 space-y-2.5"
                         >
-                          <div className="flex items-center justify-between gap-2 text-xs text-[#5C554E] dark:text-[#B5ACA3]">
+                          <div className="flex items-center justify-between gap-2 text-xs text-[#57534E] dark:text-[#D6D3D1]">
                             <span className="tabular-nums">
                               {formattedDate}
                               <span aria-hidden="true" className="mx-1.5">
@@ -322,20 +314,29 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
           ) : (
             <>
               <div className="space-y-3">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-2">
                   <h3 className="text-sm font-semibold text-[#1C1815] dark:text-[#F5F2EC]">
                     Order Items ({items.reduce((acc, i) => acc + i.quantity, 0)})
                   </h3>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      onClearCart();
-                      setOrderPrepared(false);
-                    }}
-                    className="text-xs text-[#5C554E] dark:text-[#B5ACA3] hover:text-[#1C1815] dark:hover:text-[#F5F2EC] underline underline-offset-2 cursor-pointer"
-                  >
-                    Clear Bag
-                  </button>
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={onClose}
+                      className="text-xs font-medium text-[#1B4332] dark:text-[#74C69D] hover:underline underline-offset-2 cursor-pointer"
+                    >
+                      + Add More Items
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onClearCart();
+                        setOrderPrepared(false);
+                      }}
+                      className="text-xs text-[#57534E] dark:text-[#D6D3D1] hover:text-[#1C1815] dark:hover:text-[#F5F2EC] underline underline-offset-2 cursor-pointer"
+                    >
+                      Clear Bag
+                    </button>
+                  </div>
                 </div>
 
                 <ul className="divide-y divide-[#E5E1DA] dark:divide-[#342D28] bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-xl px-4">
@@ -356,14 +357,14 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                             <p className="text-sm font-semibold text-[#1C1815] dark:text-[#F5F2EC] leading-snug">
                               {item.name}
                             </p>
-                            <p className="text-xs text-[#5C554E] dark:text-[#B5ACA3] mt-0.5">
+                            <p className="text-xs text-[#57534E] dark:text-[#D6D3D1] mt-0.5">
                               {item.variantLabel} · Rs. {item.unitPricePkr.toLocaleString()}
                             </p>
                           </div>
                           <button
                             type="button"
                             onClick={() => onRemoveItem(item.cartKey)}
-                            className="p-1.5 text-[#5C554E] dark:text-[#B5ACA3] hover:text-red-700 dark:hover:text-red-400 transition-colors cursor-pointer"
+                            className="p-1.5 text-[#57534E] dark:text-[#D6D3D1] hover:text-red-700 dark:hover:text-red-400 transition-colors cursor-pointer"
                             aria-label={`Remove ${item.name} from bag`}
                           >
                             <Trash2 className="w-4 h-4" aria-hidden="true" />
@@ -420,7 +421,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     className={`py-2 px-3 text-xs font-medium rounded-md transition-colors cursor-pointer whitespace-nowrap ${
                       orderType === 'delivery'
                         ? 'bg-white dark:bg-[#1D1916] text-[#1C1815] dark:text-[#F5F2EC] shadow-xs'
-                        : 'text-[#5C554E] dark:text-[#B5ACA3] hover:text-[#1C1815] dark:hover:text-[#F5F2EC]'
+                        : 'text-[#57534E] dark:text-[#D6D3D1] hover:text-[#1C1815] dark:hover:text-[#F5F2EC]'
                     }`}
                   >
                     Sialkot Delivery
@@ -431,20 +432,20 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     className={`py-2 px-3 text-xs font-medium rounded-md transition-colors cursor-pointer whitespace-nowrap ${
                       orderType === 'takeout'
                         ? 'bg-white dark:bg-[#1D1916] text-[#1C1815] dark:text-[#F5F2EC] shadow-xs'
-                        : 'text-[#5C554E] dark:text-[#B5ACA3] hover:text-[#1C1815] dark:hover:text-[#F5F2EC]'
+                        : 'text-[#57534E] dark:text-[#D6D3D1] hover:text-[#1C1815] dark:hover:text-[#F5F2EC]'
                     }`}
                   >
                     Store Takeout
                   </button>
                 </div>
                 {orderType === 'delivery' && (
-                  <p className="text-xs text-[#5C554E] dark:text-[#B5ACA3]">
+                  <p className="text-xs text-[#57534E] dark:text-[#D6D3D1]">
                     Free Sialkot delivery on orders Rs. {BAKERY_INFO.freeDeliveryThresholdPkr.toLocaleString()} or above (Rs. {BAKERY_INFO.deliveryFeePkr} standard). Cash on Delivery.
                   </p>
                 )}
                 {orderType === 'takeout' && (
-                  <p className="text-xs text-[#5C554E] dark:text-[#B5ACA3]">
-                    Pickup from {BAKERY_INFO.address} · Open till 1:30 AM.
+                  <p className="text-xs text-[#57534E] dark:text-[#D6D3D1]">
+                    Pickup from {BAKERY_INFO.address}.
                   </p>
                 )}
 
@@ -467,14 +468,14 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       <Clock className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                       <span>{deliveryEstimate.statusLabel}</span>
                     </span>
-                    <span className="text-[#5C554E] dark:text-[#B5ACA3] tabular-nums whitespace-nowrap">
+                    <span className="text-[#57534E] dark:text-[#D6D3D1] tabular-nums whitespace-nowrap">
                       {deliveryEstimate.currentTimeFormatted}
                     </span>
                   </div>
                   <p className="text-sm font-semibold text-[#1C1815] dark:text-[#F5F2EC] tabular-nums">
                     {deliveryEstimate.headline}
                   </p>
-                  <p className="text-xs text-[#5C554E] dark:text-[#B5ACA3] leading-relaxed">
+                  <p className="text-xs text-[#57534E] dark:text-[#D6D3D1] leading-relaxed">
                     {deliveryEstimate.reasonNote}
                   </p>
                 </div>
@@ -484,7 +485,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 <h3 className="text-sm font-semibold text-[#1C1815] dark:text-[#F5F2EC]">Customer Details</h3>
                 <div className="space-y-2.5">
                   <div>
-                    <label htmlFor="cust-name" className="block text-xs font-medium text-[#5C554E] dark:text-[#B5ACA3] mb-1">
+                    <label htmlFor="cust-name" className="block text-xs font-medium text-[#57534E] dark:text-[#D6D3D1] mb-1">
                       Full Name *
                     </label>
                     <input
@@ -496,12 +497,12 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         setFormError('');
                       }}
                       placeholder="e.g. Bilal Ahmed"
-                      className="w-full px-3.5 py-2.5 text-sm bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-lg text-[#1C1815] dark:text-[#F5F2EC] placeholder:text-[#8C847B] dark:placeholder:text-[#8E857D] focus:outline-none focus:border-[#1B4332] dark:focus:border-[#52B788]"
+                      className="w-full px-3.5 py-2.5 text-sm bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-lg text-[#1C1815] dark:text-[#F5F2EC] placeholder:text-[#57534E] dark:placeholder:text-[#A8A29E] focus:outline-none focus:border-[#1B4332] dark:focus:border-[#52B788]"
                     />
                   </div>
 
                   <div>
-                    <label htmlFor="cust-phone" className="block text-xs font-medium text-[#5C554E] dark:text-[#B5ACA3] mb-1">
+                    <label htmlFor="cust-phone" className="block text-xs font-medium text-[#57534E] dark:text-[#D6D3D1] mb-1">
                       Mobile / WhatsApp Number *
                     </label>
                     <input
@@ -513,13 +514,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         setFormError('');
                       }}
                       placeholder="e.g. 0300 1234567"
-                      className="w-full px-3.5 py-2.5 text-sm bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-lg text-[#1C1815] dark:text-[#F5F2EC] placeholder:text-[#8C847B] dark:placeholder:text-[#8E857D] focus:outline-none focus:border-[#1B4332] dark:focus:border-[#52B788]"
+                      className="w-full px-3.5 py-2.5 text-sm bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-lg text-[#1C1815] dark:text-[#F5F2EC] placeholder:text-[#57534E] dark:placeholder:text-[#A8A29E] focus:outline-none focus:border-[#1B4332] dark:focus:border-[#52B788]"
                     />
                   </div>
 
                   {orderType === 'delivery' && (
                     <div>
-                      <label htmlFor="cust-address" className="block text-xs font-medium text-[#5C554E] dark:text-[#B5ACA3] mb-1">
+                      <label htmlFor="cust-address" className="block text-xs font-medium text-[#57534E] dark:text-[#D6D3D1] mb-1">
                         Sialkot Delivery Address *
                       </label>
                       <input
@@ -531,13 +532,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                           setFormError('');
                         }}
                         placeholder="House #, Street, Kotli Behram / Kashmir Road, Sialkot"
-                        className="w-full px-3.5 py-2.5 text-sm bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-lg text-[#1C1815] dark:text-[#F5F2EC] placeholder:text-[#8C847B] dark:placeholder:text-[#8E857D] focus:outline-none focus:border-[#1B4332] dark:focus:border-[#52B788]"
+                        className="w-full px-3.5 py-2.5 text-sm bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-lg text-[#1C1815] dark:text-[#F5F2EC] placeholder:text-[#57534E] dark:placeholder:text-[#A8A29E] focus:outline-none focus:border-[#1B4332] dark:focus:border-[#52B788]"
                       />
                     </div>
                   )}
 
                   <div>
-                    <label htmlFor="cust-notes" className="block text-xs font-medium text-[#5C554E] dark:text-[#B5ACA3] mb-1">
+                    <label htmlFor="cust-notes" className="block text-xs font-medium text-[#57534E] dark:text-[#D6D3D1] mb-1">
                       Order Note (Optional)
                     </label>
                     <input
@@ -548,7 +549,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         setCustomer((c) => ({ ...c, instructions: e.target.value }))
                       }
                       placeholder="Preferred pickup time, cake candles, or landmark"
-                      className="w-full px-3.5 py-2.5 text-sm bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-lg text-[#1C1815] dark:text-[#F5F2EC] placeholder:text-[#8C847B] dark:placeholder:text-[#8E857D] focus:outline-none focus:border-[#1B4332] dark:focus:border-[#52B788]"
+                      className="w-full px-3.5 py-2.5 text-sm bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-lg text-[#1C1815] dark:text-[#F5F2EC] placeholder:text-[#57534E] dark:placeholder:text-[#A8A29E] focus:outline-none focus:border-[#1B4332] dark:focus:border-[#52B788]"
                     />
                   </div>
                 </div>
@@ -565,7 +566,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   <p className="font-semibold text-[#1B4332] dark:text-[#74C69D]">
                     WhatsApp Order Ready — {BAKERY_INFO.phoneDisplay}
                   </p>
-                  <p className="text-[#5C554E] dark:text-[#B5ACA3]">
+                  <p className="text-[#57534E] dark:text-[#D6D3D1]">
                     Your itemized order opened in WhatsApp. Confirm directly with our Kashmir Road counter team.
                   </p>
                 </div>
@@ -577,12 +578,12 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
         {items.length > 0 && (
           <div className="px-6 py-4 bg-white dark:bg-[#1D1916] border-t border-[#E5E1DA] dark:border-[#342D28] space-y-3">
             <div className="space-y-1 text-sm">
-              <div className="flex justify-between text-[#5C554E] dark:text-[#B5ACA3]">
+              <div className="flex justify-between text-[#57534E] dark:text-[#D6D3D1]">
                 <span>Subtotal</span>
                 <span className="tabular-nums">Rs. {subtotalPkr.toLocaleString()}</span>
               </div>
               {orderType === 'delivery' && (
-                <div className="flex justify-between text-[#5C554E] dark:text-[#B5ACA3]">
+                <div className="flex justify-between text-[#57534E] dark:text-[#D6D3D1]">
                   <span>Delivery (Sialkot)</span>
                   <span className="tabular-nums">
                     {deliveryFeePkr === 0 ? 'Free' : `Rs. ${deliveryFeePkr}`}
@@ -592,12 +593,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               <div className="flex justify-between text-base font-semibold text-[#1C1815] dark:text-[#F5F2EC] pt-1.5 border-t border-[#F0EDE7] dark:border-[#2E2823]">
                 <span>Total (Cash on {orderType === 'delivery' ? 'Delivery' : 'Pickup'})</span>
                 <span className="tabular-nums">Rs. {grandTotalPkr.toLocaleString()}</span>
-              </div>
-              <div className="flex justify-between text-xs text-[#1B4332] dark:text-[#74C69D] pt-0.5">
-                <span>Loyalty Rewards earned</span>
-                <span className="font-semibold tabular-nums">
-                  +{calculateOrderPoints(grandTotalPkr)} pts
-                </span>
               </div>
             </div>
 
