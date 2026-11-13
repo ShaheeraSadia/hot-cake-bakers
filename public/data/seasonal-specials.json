@@ -1,0 +1,46 @@
+[
+  {
+    "id": "seasonal-gajar-ka-halwa",
+    "name": "Desi Ghee Gajar Ka Halwa",
+    "urduName": "دیسی گھی گاجر کا حلوہ",
+    "category": "Traditional Sweets",
+    "availabilityNote": "Winter Special · Limited Batch",
+    "description": "Slow-simmered red winter carrots in pure khoya and desi ghee, finished with roasted almonds and green pistachios.",
+    "imageKey": "traditionalSweets",
+    "imageAlt": "Limited-time Desi Ghee Gajar Ka Halwa and traditional winter mithai garnished with pistachios",
+    "variants": [
+      { "id": "250g", "label": "250g Box", "pricePkr": 580 },
+      { "id": "half-kg", "label": "500g Box", "pricePkr": 1100 },
+      { "id": "one-kg", "label": "1 Kg Family Box", "pricePkr": 2100 }
+    ]
+  },
+  {
+    "id": "seasonal-almond-pistachio-pinni",
+    "name": "Almond & Pistachio Winter Pinni",
+    "urduName": "پستہ بادام پنی",
+    "category": "Traditional Sweets",
+    "availabilityNote": "Limited Time · Pure Desi Ghee",
+    "description": "Traditional Sialkoti winter sweet crafted from roasted whole-wheat flour, desi ghee, crushed almonds, and green cardamom.",
+    "imageKey": "cakeRusk",
+    "imageAlt": "Warm winter almond and cardamom tea-time bakery assortment",
+    "variants": [
+      { "id": "half-kg", "label": "500g Box", "pricePkr": 980 },
+      { "id": "one-kg", "label": "1 Kg Box", "pricePkr": 1900 }
+    ]
+  },
+  {
+    "id": "seasonal-walnut-honey-loaf",
+    "name": "Warm Walnut & Honey Tea Cake",
+    "urduName": "اخروٹ شہد کیک",
+    "category": "Cakes",
+    "availabilityNote": "Limited Run · Fresh Evening Batch",
+    "description": "Rich butter pound cake studded with toasted Kashmiri walnuts and brushed with warm wildflower honey glaze.",
+    "imageKey": "chocolateCake",
+    "imageAlt": "Freshly baked seasonal walnut and honey celebration cake",
+    "supportsCakeNote": true,
+    "variants": [
+      { "id": "1lb", "label": "1 lb Loaf", "pricePkr": 920 },
+      { "id": "2lb", "label": "2 lbs Celebration", "pricePkr": 1780 }
+    ]
+  }
+]

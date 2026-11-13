@@ -1,0 +1,6 @@
+{
+  "name": "Hot Cake Bakers — Sialkot",
+  "description": "Artisanal cakes, pastries, cake rusk, halwa puri, chicken samosas, pizza, and traditional sweets at Kashmir Road, Kotli Behram, Sialkot. Open till 1:30 AM with direct WhatsApp ordering.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
