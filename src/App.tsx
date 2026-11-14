@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
-import { Search, X, Phone, MessageCircle, MapPin, Clock, ArrowRight, ShoppingBag, RotateCcw, ExternalLink } from 'lucide-react';
+import { Search, X, Phone, MessageCircle, MapPin, Clock, ArrowRight, ShoppingBag, RotateCcw, ExternalLink, Star } from 'lucide-react';
 import {
   BAKERY_INFO,
   HERO_SLIDES,
@@ -13,6 +13,7 @@ import { SeasonalSpecials } from './components/SeasonalSpecials';
 import { ProductCard } from './components/ProductCard';
 import { ItemDetailModal } from './components/ItemDetailModal';
 import { CartDrawer } from './components/CartDrawer';
+import { FeedbackModal } from './components/FeedbackModal';
 import { ResilientImage } from './components/ResilientImage';
 
 const CART_STORAGE_KEY = 'hot_cake_bakers_sialkot_cart_v1';
@@ -51,6 +52,7 @@ export default function App() {
     }
   });
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const [isLocationImageOpen, setIsLocationImageOpen] = useState(false);
   const [seasonalItems, setSeasonalItems] = useState<MenuItem[]>([]);
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
@@ -874,44 +876,65 @@ export default function App() {
           totalItems > 0 ? 'pb-24 md:pb-10' : 'pb-10'
         }`}
       >
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div className="space-y-1">
-            <p className="font-display text-lg font-semibold text-[#1C1815] dark:text-[#F5F2EC]">
-              {BAKERY_INFO.name}{' '}
-              <span className="font-urdu text-base font-normal text-[#57534E] dark:text-[#D6D3D1] ms-2" lang="ur">
-                {BAKERY_INFO.urduName}
-              </span>
-            </p>
-            <p className="text-xs font-medium text-[#57534E] dark:text-[#D6D3D1] tabular-nums leading-relaxed">
-              {BAKERY_INFO.address} · {BAKERY_INFO.shortHours} ·{' '}
-              <a href={`tel:+${BAKERY_INFO.whatsappDigits}`} className="hover:underline underline-offset-2 whitespace-nowrap">
-                {BAKERY_INFO.phoneDisplay}
-              </a>
-              {' / '}
-              <a href={`tel:+${BAKERY_INFO.secondaryPhoneDigits}`} className="hover:underline underline-offset-2 whitespace-nowrap">
-                {BAKERY_INFO.secondaryPhoneDisplay}
-              </a>
-            </p>
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          <div className="bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-xl p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <p className="text-sm font-semibold text-[#1C1815] dark:text-[#F5F2EC]">
+                Ordered recently from Hot Cake Bakers?
+              </p>
+              <p className="text-xs text-[#57534E] dark:text-[#D6D3D1] leading-relaxed">
+                Rate your experience and send quick feedback directly to our Kashmir Road team on WhatsApp.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setIsFeedbackOpen(true)}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#1B4332] hover:bg-[#143325] text-white text-xs sm:text-sm font-medium px-4 py-2.5 rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            >
+              <Star className="w-4 h-4 shrink-0" aria-hidden="true" />
+              <span>Share Feedback</span>
+            </button>
           </div>
 
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-xs font-medium text-[#57534E] dark:text-[#D6D3D1]">
-            <a href="#menu" className="hover:text-[#1C1815] dark:hover:text-[#F5F2EC] transition-colors">
-              Full Menu
-            </a>
-            <a href="#location" className="hover:text-[#1C1815] dark:hover:text-[#F5F2EC] transition-colors">
-              Location &amp; Hours
-            </a>
-            <a
-              href={quickWhatsAppUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-[#1C1815] dark:hover:text-[#F5F2EC] transition-colors"
-            >
-              WhatsApp Order
-            </a>
-            <span className="text-[#57534E] dark:text-[#A8A29E]">
-              © {new Date().getFullYear()} {BAKERY_INFO.name}
-            </span>
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div className="space-y-1">
+              <p className="font-display text-lg font-semibold text-[#1C1815] dark:text-[#F5F2EC]">
+                {BAKERY_INFO.name}{' '}
+                <span className="font-urdu text-base font-normal text-[#57534E] dark:text-[#D6D3D1] ms-2" lang="ur">
+                  {BAKERY_INFO.urduName}
+                </span>
+              </p>
+              <p className="text-xs font-medium text-[#57534E] dark:text-[#D6D3D1] tabular-nums leading-relaxed">
+                {BAKERY_INFO.address} · {BAKERY_INFO.shortHours} ·{' '}
+                <a href={`tel:+${BAKERY_INFO.whatsappDigits}`} className="hover:underline underline-offset-2 whitespace-nowrap">
+                  {BAKERY_INFO.phoneDisplay}
+                </a>
+                {' / '}
+                <a href={`tel:+${BAKERY_INFO.secondaryPhoneDigits}`} className="hover:underline underline-offset-2 whitespace-nowrap">
+                  {BAKERY_INFO.secondaryPhoneDisplay}
+                </a>
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-xs font-medium text-[#57534E] dark:text-[#D6D3D1]">
+              <a href="#menu" className="hover:text-[#1C1815] dark:hover:text-[#F5F2EC] transition-colors">
+                Full Menu
+              </a>
+              <a href="#location" className="hover:text-[#1C1815] dark:hover:text-[#F5F2EC] transition-colors">
+                Location &amp; Hours
+              </a>
+              <a
+                href={quickWhatsAppUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-[#1C1815] dark:hover:text-[#F5F2EC] transition-colors"
+              >
+                WhatsApp Order
+              </a>
+              <span className="text-[#57534E] dark:text-[#A8A29E]">
+                © {new Date().getFullYear()} {BAKERY_INFO.name}
+              </span>
+            </div>
           </div>
         </div>
       </footer>
@@ -958,6 +981,11 @@ export default function App() {
         onUpdateCartKeyQuantity={updateCartKeyQuantity}
         onRemoveItem={removeCartKey}
         onClearCart={() => setCart([])}
+      />
+
+      <FeedbackModal
+        isOpen={isFeedbackOpen}
+        onClose={() => setIsFeedbackOpen(false)}
       />
 
       {isLocationImageOpen && (
