@@ -19,6 +19,7 @@ export interface MenuItem {
   urduName: string;
   category: Exclude<MenuCategory, 'All'>;
   availabilityNote: string;
+  badge?: 'Top Seller' | 'Customer Favorite';
   description: string;
   image: string;
   imageAlt: string;

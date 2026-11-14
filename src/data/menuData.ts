@@ -116,7 +116,8 @@ export const MENU_ITEMS: MenuItem[] = [
     name: 'Belgian Chocolate Fudge Cake',
     urduName: 'چاکلیٹ فج کیک',
     category: 'Cakes',
-    availabilityNote: 'Bestseller · Ready & Custom',
+    availabilityNote: 'Ready & Custom',
+    badge: 'Top Seller',
     description:
       'Moist dark cocoa sponge layered with rich chocolate ganache and finished with roasted almond slivers.',
     image: chocolateCakeImg,
@@ -181,6 +182,7 @@ export const MENU_ITEMS: MenuItem[] = [
     urduName: 'اسپیشل کیک رسک',
     category: 'Cake Rusk',
     availabilityNote: 'Crisp Batch · Tea-Time Staple',
+    badge: 'Customer Favorite',
     description:
       'Twice-baked golden butter cake rusks with a tender crunch and subtle cardamom warmth, packed fresh daily.',
     image: cakeRuskImg,
@@ -211,6 +213,7 @@ export const MENU_ITEMS: MenuItem[] = [
     urduName: 'حلوہ پوری ناشتہ',
     category: 'Breakfast & Savories',
     availabilityNote: 'Morning Specialty · Served Hot',
+    badge: 'Customer Favorite',
     description:
       'Fluffy golden puris served with saffron suji halwa, slow-simmered Lahori chana, tangy aloo bhujia, and achaar.',
     image: halwaPuriImg,
@@ -226,6 +229,7 @@ export const MENU_ITEMS: MenuItem[] = [
     urduName: 'چکن سموسہ اور پیٹیز',
     category: 'Breakfast & Savories',
     availabilityNote: 'Hot Counter · Mint Raita',
+    badge: 'Top Seller',
     description:
       'Spiced shredded chicken folded inside blistered golden samosa pastry and flaky puff patties with fresh mint raita.',
     image: chickenSamosaImg,
@@ -242,6 +246,7 @@ export const MENU_ITEMS: MenuItem[] = [
     urduName: 'چکن تکہ پیزا',
     category: 'Chicken Pizza',
     availabilityNote: 'Baked to Order · Oven Hot',
+    badge: 'Customer Favorite',
     description:
       'Hand-stretched pan crust topped with smoky chicken tikka cubes, mozzarella blend, crisp bell peppers, and red onion.',
     image: chickenPizzaImg,

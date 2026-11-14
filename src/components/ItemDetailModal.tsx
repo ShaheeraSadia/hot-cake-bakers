@@ -72,6 +72,17 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
             fallbackTitle={item.name}
             className="w-full h-full object-cover"
           />
+          {item.badge && (
+            <span
+              className={`absolute top-3 left-3 px-2.5 py-1 rounded-md text-[11px] font-semibold tracking-wide shadow-xs ${
+                item.badge === 'Top Seller'
+                  ? 'bg-[#1B4332] text-white'
+                  : 'bg-[#FAF9F7]/95 dark:bg-[#1D1916]/95 text-[#1C1815] dark:text-[#F5F2EC] border border-[#E5E1DA] dark:border-[#342D28]'
+              }`}
+            >
+              {item.badge}
+            </span>
+          )}
         </div>
 
         <form onSubmit={handleSubmit} className="p-4 sm:p-6 flex flex-col gap-4">
