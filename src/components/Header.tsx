@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, Moon, ShoppingBag, Sun, X } from 'lucide-react';
+import { TrackedOrder } from '../types/bakery';
+import { OrderStatusMenu } from './OrderStatusMenu';
 
 interface HeaderProps {
   totalItems: number;
   theme: 'light' | 'dark';
   onToggleTheme: () => void;
   onOpenCart: () => void;
+  trackedOrder: TrackedOrder | null;
+  onAdvanceOrderStage: () => void;
+  onDismissOrder: () => void;
+  onQuickReorder?: () => void;
 }
 
 const NAV_LINKS = [
@@ -20,6 +26,10 @@ export const Header: React.FC<HeaderProps> = ({
   theme,
   onToggleTheme,
   onOpenCart,
+  trackedOrder,
+  onAdvanceOrderStage,
+  onDismissOrder,
+  onQuickReorder,
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -43,18 +53,18 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header className="sticky top-0 z-30 bg-[#FAF9F7]/95 dark:bg-[#141210]/95 backdrop-blur-sm border-b border-[#E5E1DA] dark:border-[#342D28] transition-colors duration-200">
-      <div className="max-w-[1200px] mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-6 lg:gap-8">
+      <div className="max-w-[1200px] mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-4 lg:gap-8">
         <a
           href="#top"
           onClick={(e) => handleNavClick(e, 'top')}
-          className="font-display text-lg sm:text-2xl font-semibold tracking-tight text-[#1C1815] dark:text-[#F5F2EC] whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1B4332] dark:focus-visible:outline-[#74C69D]"
+          className="font-display text-base sm:text-xl lg:text-2xl font-semibold tracking-tight text-[#1C1815] dark:text-[#F5F2EC] whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1B4332] dark:focus-visible:outline-[#74C69D]"
         >
           Hot Cake Bakers
         </a>
 
         <nav
           aria-label="Primary navigation"
-          className="hidden md:flex items-center gap-7 text-sm font-medium text-[#44403C] dark:text-[#D6D3D1]"
+          className="hidden md:flex items-center gap-4 lg:gap-7 text-sm font-medium text-[#44403C] dark:text-[#D6D3D1]"
         >
           {NAV_LINKS.map((link) => (
             <a
@@ -68,7 +78,14 @@ export const Header: React.FC<HeaderProps> = ({
           ))}
         </nav>
 
-        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+          <OrderStatusMenu
+            trackedOrder={trackedOrder}
+            onAdvanceStage={onAdvanceOrderStage}
+            onDismissOrder={onDismissOrder}
+            onQuickReorder={onQuickReorder}
+          />
+
           <button
             type="button"
             onClick={onToggleTheme}
@@ -86,12 +103,12 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             type="button"
             onClick={onOpenCart}
-            className="inline-flex items-center gap-1.5 sm:gap-2 bg-[#1B4332] hover:bg-[#143325] text-white text-xs sm:text-sm font-medium px-2.5 sm:px-4 h-9 sm:h-10 rounded-lg transition-colors duration-150 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1B4332]"
+            className="inline-flex items-center gap-1.5 sm:gap-2 bg-[#1B4332] hover:bg-[#143325] text-white text-xs sm:text-sm font-medium px-2 sm:px-3 lg:px-4 h-9 sm:h-10 rounded-lg transition-colors duration-150 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1B4332]"
             aria-label={`Open order bag with ${totalItems} items`}
           >
             <ShoppingBag className="w-4 h-4 shrink-0" aria-hidden="true" />
             <span>
-              <span className="hidden sm:inline">Order </span>Bag
+              <span className="hidden lg:inline">Order </span>Bag
             </span>
             <span className="tabular-nums font-semibold opacity-90">({totalItems})</span>
           </button>

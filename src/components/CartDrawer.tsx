@@ -55,6 +55,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   const [copied, setCopied] = useState(false);
   const [orderPrepared, setOrderPrepared] = useState(false);
   const [formError, setFormError] = useState('');
+  const [tipPercent, setTipPercent] = useState<number>(0);
   const [now, setNow] = useState<Date>(() => new Date());
 
   useEffect(() => {
@@ -94,7 +95,12 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
       : BAKERY_INFO.deliveryFeePkr;
   }, [orderType, items.length, subtotalPkr]);
 
-  const grandTotalPkr = subtotalPkr + deliveryFeePkr;
+  const tipAmountPkr = useMemo(() => {
+    if (items.length === 0 || tipPercent <= 0) return 0;
+    return Math.round((subtotalPkr * tipPercent) / 100);
+  }, [items.length, subtotalPkr, tipPercent]);
+
+  const grandTotalPkr = subtotalPkr + deliveryFeePkr + tipAmountPkr;
 
   const deliveryEstimate = useMemo(
     () => calculateDeliveryEstimate(now, orderType, items),
@@ -123,6 +129,10 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
       );
     }
 
+    if (tipAmountPkr > 0) {
+      lines.push(`Tip (${tipPercent}%): Rs. ${tipAmountPkr.toLocaleString()}`);
+    }
+
     lines.push(`Total: Rs. ${grandTotalPkr.toLocaleString()}`);
     lines.push(`${modeLabel}: ${locationValue}`);
     lines.push(`Name: ${customer.name.trim() || 'Guest'}`);
@@ -134,7 +144,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     }
 
     return lines.join('\n');
-  }, [items, orderType, deliveryFeePkr, grandTotalPkr, customer]);
+  }, [items, orderType, deliveryFeePkr, tipAmountPkr, tipPercent, grandTotalPkr, customer]);
 
   const whatsappUrl = useMemo(() => {
     return `https://wa.me/${BAKERY_INFO.whatsappDigits}?text=${encodeURIComponent(
@@ -331,6 +341,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       onClick={() => {
                         onClearCart();
                         setOrderPrepared(false);
+                        setTipPercent(0);
                       }}
                       className="text-xs text-[#57534E] dark:text-[#D6D3D1] hover:text-[#1C1815] dark:hover:text-[#F5F2EC] underline underline-offset-2 cursor-pointer whitespace-nowrap"
                     >
@@ -555,6 +566,54 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 </div>
               </div>
 
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-sm font-semibold text-[#1C1815] dark:text-[#F5F2EC]">
+                    Add Tip <span className="text-xs font-normal text-[#57534E] dark:text-[#D6D3D1]">(Optional)</span>
+                  </span>
+                  {tipAmountPkr > 0 && (
+                    <span className="text-xs font-semibold text-[#1B4332] dark:text-[#74C69D] tabular-nums">
+                      +Rs. {tipAmountPkr.toLocaleString()}
+                    </span>
+                  )}
+                </div>
+
+                <div
+                  className="grid grid-cols-4 gap-1.5"
+                  role="group"
+                  aria-label="Select optional tip percentage"
+                >
+                  {[0, 5, 10, 15].map((pct) => {
+                    const isSelected = tipPercent === pct;
+                    const previewPkr = pct > 0 ? Math.round((subtotalPkr * pct) / 100) : 0;
+                    return (
+                      <button
+                        key={pct}
+                        type="button"
+                        aria-pressed={isSelected}
+                        onClick={() => setTipPercent(pct)}
+                        className={`py-2 px-1.5 rounded-lg border text-center transition-colors cursor-pointer min-h-[42px] flex flex-col items-center justify-center ${
+                          isSelected
+                            ? 'bg-[#1B4332] dark:bg-[#2D6A4F] text-white border-[#1B4332] dark:border-[#52B788]'
+                            : 'bg-white dark:bg-[#1D1916] text-[#1C1815] dark:text-[#F5F2EC] border-[#E5E1DA] dark:border-[#342D28] hover:border-[#1B4332] dark:hover:border-[#52B788]'
+                        }`}
+                      >
+                        <span className="text-xs font-semibold leading-tight whitespace-nowrap">
+                          {pct === 0 ? 'None' : `${pct}%`}
+                        </span>
+                        <span
+                          className={`text-[11px] tabular-nums leading-tight mt-0.5 whitespace-nowrap ${
+                            isSelected ? 'text-white/85' : 'text-[#57534E] dark:text-[#D6D3D1]'
+                          }`}
+                        >
+                          {pct === 0 ? 'Rs. 0' : `Rs. ${previewPkr.toLocaleString()}`}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
               {formError && (
                 <p role="alert" className="text-xs font-medium text-red-700 dark:text-red-300 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 rounded-lg px-3.5 py-2.5">
                   {formError}
@@ -588,6 +647,12 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   <span className="tabular-nums">
                     {deliveryFeePkr === 0 ? 'Free' : `Rs. ${deliveryFeePkr}`}
                   </span>
+                </div>
+              )}
+              {tipAmountPkr > 0 && (
+                <div className="flex justify-between text-[#57534E] dark:text-[#D6D3D1]">
+                  <span>Tip ({tipPercent}%)</span>
+                  <span className="tabular-nums">Rs. {tipAmountPkr.toLocaleString()}</span>
                 </div>
               )}
               <div className="flex justify-between text-base font-semibold text-[#1C1815] dark:text-[#F5F2EC] pt-1.5 border-t border-[#F0EDE7] dark:border-[#2E2823]">

@@ -57,3 +57,16 @@ export interface RecentOrder {
   totalPkr: number;
   customerName: string;
 }
+
+export type OrderStatusStage = 'received' | 'preparing' | 'ready';
+
+export interface TrackedOrder {
+  id: string;
+  orderNumber: string;
+  createdAtMs: number;
+  orderType: OrderType;
+  itemCount: number;
+  totalPkr: number;
+  customerName: string;
+  stage: OrderStatusStage;
+}

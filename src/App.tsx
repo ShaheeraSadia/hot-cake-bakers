@@ -6,7 +6,7 @@ import {
   MENU_CATEGORIES,
   MENU_ITEMS,
 } from './data/menuData';
-import { CartItem, MenuCategory, MenuItem, MenuVariant, OrderType, RecentOrder } from './types/bakery';
+import { CartItem, MenuCategory, MenuItem, MenuVariant, OrderType, RecentOrder, TrackedOrder } from './types/bakery';
 import { Header } from './components/Header';
 import { HeroCarousel } from './components/HeroCarousel';
 import { SeasonalSpecials } from './components/SeasonalSpecials';
@@ -17,6 +17,7 @@ import { ResilientImage } from './components/ResilientImage';
 
 const CART_STORAGE_KEY = 'hot_cake_bakers_sialkot_cart_v1';
 const RECENT_ORDERS_STORAGE_KEY = 'hot_cake_bakers_sialkot_recent_orders_v1';
+const TRACKED_ORDER_STORAGE_KEY = 'hot_cake_bakers_tracked_order_v1';
 const THEME_STORAGE_KEY = 'hot_cake_bakers_theme_v1';
 const MAX_RECENT_ORDERS = 5;
 
@@ -41,6 +42,14 @@ export default function App() {
     }
   });
   const [orderType, setOrderType] = useState<OrderType>('delivery');
+  const [trackedOrder, setTrackedOrder] = useState<TrackedOrder | null>(() => {
+    try {
+      const saved = localStorage.getItem(TRACKED_ORDER_STORAGE_KEY);
+      return saved ? (JSON.parse(saved) as TrackedOrder) : null;
+    } catch {
+      return null;
+    }
+  });
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isLocationImageOpen, setIsLocationImageOpen] = useState(false);
   const [seasonalItems, setSeasonalItems] = useState<MenuItem[]>([]);
@@ -83,6 +92,33 @@ export default function App() {
       // Ignore storage quota errors
     }
   }, [recentOrders]);
+
+  useEffect(() => {
+    try {
+      if (trackedOrder) {
+        localStorage.setItem(TRACKED_ORDER_STORAGE_KEY, JSON.stringify(trackedOrder));
+      } else {
+        localStorage.removeItem(TRACKED_ORDER_STORAGE_KEY);
+      }
+    } catch {
+      // Ignore storage quota errors
+    }
+  }, [trackedOrder]);
+
+  useEffect(() => {
+    if (!trackedOrder || trackedOrder.stage === 'ready') return;
+
+    const delayMs = trackedOrder.stage === 'received' ? 8000 : 12000;
+    const nextStage = trackedOrder.stage === 'received' ? 'preparing' : 'ready';
+
+    const timer = window.setTimeout(() => {
+      setTrackedOrder((prev) =>
+        prev && prev.id === trackedOrder.id ? { ...prev, stage: nextStage } : prev
+      );
+    }, delayMs);
+
+    return () => window.clearTimeout(timer);
+  }, [trackedOrder]);
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark');
@@ -220,21 +256,60 @@ export default function App() {
     const isRepeatClickOnLatest =
       Boolean(latest) && signature(latest.items, latest.orderType) === incomingSig;
 
+    const nowMs = Date.now();
+    const itemCount = order.items.reduce((sum, i) => sum + i.quantity, 0);
+
     if (isRepeatClickOnLatest) {
       setRecentOrders((prev) => [
-        { ...prev[0], createdAtIso: new Date().toISOString(), totalPkr: order.totalPkr },
+        { ...prev[0], createdAtIso: new Date(nowMs).toISOString(), totalPkr: order.totalPkr },
         ...prev.slice(1),
       ]);
+      setTrackedOrder((prev) =>
+        prev ?? {
+          id: latest.id,
+          orderNumber: `#HCB-${String(nowMs).slice(-4)}`,
+          createdAtMs: nowMs,
+          orderType: order.orderType,
+          itemCount,
+          totalPkr: order.totalPkr,
+          customerName: order.customerName,
+          stage: 'received',
+        }
+      );
       return;
     }
 
-    const nowIso = new Date().toISOString();
+    const orderId = `ord_${nowMs}`;
+    const nowIso = new Date(nowMs).toISOString();
     const nextEntry: RecentOrder = {
-      id: `ord_${Date.now()}`,
+      id: orderId,
       createdAtIso: nowIso,
       ...order,
     };
     setRecentOrders((prev) => [nextEntry, ...prev].slice(0, MAX_RECENT_ORDERS));
+    setTrackedOrder({
+      id: orderId,
+      orderNumber: `#HCB-${String(nowMs).slice(-4)}`,
+      createdAtMs: nowMs,
+      orderType: order.orderType,
+      itemCount,
+      totalPkr: order.totalPkr,
+      customerName: order.customerName,
+      stage: 'received',
+    });
+  };
+
+  const handleAdvanceOrderStage = () => {
+    setTrackedOrder((prev) => {
+      if (!prev) return null;
+      if (prev.stage === 'received') return { ...prev, stage: 'preparing' };
+      if (prev.stage === 'preparing') return { ...prev, stage: 'ready' };
+      return prev;
+    });
+  };
+
+  const handleDismissOrder = () => {
+    setTrackedOrder(null);
   };
 
   const handleReorder = (order: RecentOrder) => {
@@ -270,6 +345,30 @@ export default function App() {
       return merged;
     });
     setOrderType(order.orderType);
+    setIsCartOpen(true);
+  };
+
+  const handleQuickReorder = () => {
+    const lastOrder =
+      (trackedOrder && recentOrders.find((o) => o.id === trackedOrder.id)) ??
+      recentOrders[0];
+    if (!lastOrder) return;
+
+    const allCatalog = [...MENU_ITEMS, ...seasonalItems];
+    const refilledItems: CartItem[] = lastOrder.items.map((pastItem) => {
+      const menuMatch = allCatalog.find((m) => m.id === pastItem.itemId);
+      const variantMatch = menuMatch?.variants.find(
+        (v) => v.id === pastItem.variantId
+      );
+      return {
+        ...pastItem,
+        unitPricePkr: variantMatch?.pricePkr ?? pastItem.unitPricePkr,
+        image: menuMatch?.image ?? pastItem.image,
+      };
+    });
+
+    setCart(refilledItems);
+    setOrderType(lastOrder.orderType);
     setIsCartOpen(true);
   };
 
@@ -314,6 +413,10 @@ export default function App() {
         theme={theme}
         onToggleTheme={() => setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'))}
         onOpenCart={() => setIsCartOpen(true)}
+        trackedOrder={trackedOrder}
+        onAdvanceOrderStage={handleAdvanceOrderStage}
+        onDismissOrder={handleDismissOrder}
+        onQuickReorder={recentOrders.length > 0 ? handleQuickReorder : undefined}
       />
 
       <main className="flex-1">
