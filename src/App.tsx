@@ -287,18 +287,21 @@ export default function App() {
       className="min-h-screen flex flex-col bg-[#FAF9F7] dark:bg-[#141210] text-[#1C1815] dark:text-[#F5F2EC] transition-colors duration-200"
     >
       {showTopNotice && (
-        <div className="bg-[#1B4332] text-white text-xs h-9 px-4 flex items-center justify-center relative">
-          <p className="truncate pr-6 text-center">
-            {BAKERY_INFO.address}
-            <span aria-hidden="true" className="mx-2 opacity-60">
-              ·
+        <div className="bg-[#1B4332] text-white text-[11px] sm:text-xs min-h-9 py-1.5 px-8 flex items-center justify-center relative">
+          <p className="text-center leading-tight">
+            <span className="sm:hidden">Kashmir Road, Sialkot · {BAKERY_INFO.shortHours}</span>
+            <span className="hidden sm:inline">
+              {BAKERY_INFO.address}
+              <span aria-hidden="true" className="mx-2 opacity-60">
+                ·
+              </span>
+              {BAKERY_INFO.shortHours} ({BAKERY_INFO.services})
             </span>
-            {BAKERY_INFO.shortHours} ({BAKERY_INFO.services})
           </p>
           <button
             type="button"
             onClick={() => setShowTopNotice(false)}
-            className="absolute right-3 p-1 text-white/80 hover:text-white cursor-pointer"
+            className="absolute right-2 sm:right-3 p-1.5 text-white/80 hover:text-white cursor-pointer"
             aria-label="Dismiss bakery hours banner"
           >
             <X className="w-3.5 h-3.5" aria-hidden="true" />
@@ -316,9 +319,9 @@ export default function App() {
       <main className="flex-1">
         {/* Section 1: Editorial Storefront Hero & 4-Column Highlights */}
         <section className="border-b border-[#E5E1DA] dark:border-[#342D28]">
-          <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
+          <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-14">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch">
-              <div className="lg:col-span-6 flex flex-col justify-center gap-6">
+              <div className="lg:col-span-6 flex flex-col justify-center gap-5 sm:gap-6">
                 <div className="space-y-3">
                   <p className="text-xs font-medium tracking-wide text-[#57534E] dark:text-[#D6D3D1]">
                     Kashmir Road, Kotli Behram, Sialkot
@@ -327,11 +330,11 @@ export default function App() {
                     </span>
                     Takeout &amp; Delivery
                   </p>
-                  <h1 className="font-display text-4xl sm:text-5xl font-semibold text-[#1C1815] dark:text-[#F5F2EC] leading-[1.12] tracking-tight text-balance">
+                  <h1 className="font-display text-[30px] sm:text-4xl lg:text-5xl font-semibold text-[#1C1815] dark:text-[#F5F2EC] leading-[1.12] tracking-tight text-balance">
                     Freshly baked cakes, savories, and Sialkot sweets.
                   </h1>
                   <p
-                    className="font-urdu text-xl sm:text-2xl text-[#1B4332] dark:text-[#74C69D] pt-1"
+                    className="font-urdu text-lg sm:text-2xl text-[#1B4332] dark:text-[#74C69D] pt-1"
                     dir="rtl"
                     lang="ur"
                   >
@@ -339,21 +342,21 @@ export default function App() {
                   </p>
                 </div>
 
-                <p className="text-base text-[#44403C] dark:text-[#D6D3D1] leading-relaxed max-w-xl">
+                <p className="text-sm sm:text-base text-[#44403C] dark:text-[#D6D3D1] leading-relaxed max-w-xl">
                   From morning Halwa Puri platters and golden tea-time cake rusk to evening chicken pizza, crispy chicken samosas, celebration cakes, and pure khoya mithai—order directly via WhatsApp for pickup or delivery across Sialkot.
                 </p>
 
-                <div className="flex flex-wrap items-center gap-4 pt-1">
+                <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-1">
                   <a
                     href="#menu"
-                    className="inline-flex items-center gap-2 bg-[#1B4332] hover:bg-[#143325] text-white text-sm font-medium px-6 py-3 rounded-lg transition-colors duration-150 whitespace-nowrap shrink-0"
+                    className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 bg-[#1B4332] hover:bg-[#143325] text-white text-sm font-medium px-5 sm:px-6 py-3 rounded-lg transition-colors duration-150 whitespace-nowrap shrink-0"
                   >
                     <span>Explore Menu &amp; Order</span>
                     <ArrowRight className="w-4 h-4" aria-hidden="true" />
                   </a>
                   <a
                     href={`tel:+${BAKERY_INFO.whatsappDigits}`}
-                    className="inline-flex items-center gap-2 bg-white dark:bg-[#1D1916] hover:bg-[#F3F1ED] dark:hover:bg-[#26211D] text-[#1C1815] dark:text-[#F5F2EC] border border-[#E5E1DA] dark:border-[#342D28] text-sm font-medium px-5 py-3 rounded-lg transition-colors duration-150 whitespace-nowrap shrink-0"
+                    className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 bg-white dark:bg-[#1D1916] hover:bg-[#F3F1ED] dark:hover:bg-[#26211D] text-[#1C1815] dark:text-[#F5F2EC] border border-[#E5E1DA] dark:border-[#342D28] text-sm font-medium px-4 sm:px-5 py-3 rounded-lg transition-colors duration-150 whitespace-nowrap shrink-0"
                   >
                     <Phone className="w-4 h-4 text-[#1B4332] dark:text-[#74C69D]" aria-hidden="true" />
                     <span className="tabular-nums">{BAKERY_INFO.phoneDisplay}</span>
@@ -423,7 +426,7 @@ export default function App() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search cakes, samosa, halwa puri..."
                   aria-label="Search menu items"
-                  className="w-full pl-10 pr-4 py-2.5 text-sm bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-lg text-[#1C1815] dark:text-[#F5F2EC] placeholder:text-[#57534E] dark:placeholder:text-[#A8A29E] focus:outline-none focus:border-[#1B4332] dark:focus:border-[#52B788]"
+                  className="w-full pl-10 pr-4 py-2.5 text-base sm:text-sm bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-lg text-[#1C1815] dark:text-[#F5F2EC] placeholder:text-[#57534E] dark:placeholder:text-[#A8A29E] focus:outline-none focus:border-[#1B4332] dark:focus:border-[#52B788]"
                 />
               </div>
             </div>
@@ -520,9 +523,9 @@ export default function App() {
               </div>
             )}
 
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
               <div
-                className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0"
+                className="flex flex-wrap items-center gap-2"
                 role="tablist"
                 aria-label="Menu categories"
               >
@@ -547,7 +550,7 @@ export default function App() {
                 })}
               </div>
 
-              <p className="text-xs font-medium text-[#57534E] dark:text-[#D6D3D1] whitespace-nowrap tabular-nums">
+              <p className="text-xs font-medium text-[#57534E] dark:text-[#D6D3D1] whitespace-nowrap tabular-nums shrink-0">
                 Showing {filteredItems.length} of {MENU_ITEMS.length} items
               </p>
             </div>
@@ -605,7 +608,7 @@ export default function App() {
                 <button
                   type="button"
                   onClick={() => setIsLocationImageOpen(true)}
-                  className="group relative w-full h-[280px] sm:h-[340px] lg:h-[380px] rounded-xl overflow-hidden border border-[#E5E1DA] dark:border-[#342D28] bg-[#F3F1ED] dark:bg-[#26211D] block text-left cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1B4332] dark:focus-visible:outline-[#52B788]"
+                  className="group relative w-full h-[240px] sm:h-[340px] lg:h-[380px] rounded-xl overflow-hidden border border-[#E5E1DA] dark:border-[#342D28] bg-[#F3F1ED] dark:bg-[#26211D] block text-left cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1B4332] dark:focus-visible:outline-[#52B788]"
                   aria-label="Enlarge Hot Cake Bakers Kashmir Road counter display photo"
                 >
                   <ResilientImage
@@ -701,20 +704,20 @@ export default function App() {
                 </li>
                 <li className="flex items-start gap-2.5">
                   <Phone className="w-4 h-4 text-[#1B4332] dark:text-[#74C69D] shrink-0 mt-0.5" aria-hidden="true" />
-                  <span className="tabular-nums">
-                    <strong className="font-semibold">Phone / WhatsApp:</strong>{' '}
+                  <span className="tabular-nums inline-flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                    <strong className="font-semibold">Phone / WhatsApp:</strong>
                     <a
                       href={`tel:+${BAKERY_INFO.whatsappDigits}`}
-                      className="hover:underline underline-offset-4"
+                      className="hover:underline underline-offset-4 whitespace-nowrap"
                     >
                       {BAKERY_INFO.phoneDisplay}
                     </a>
-                    <span aria-hidden="true" className="mx-2 text-[#57534E] dark:text-[#A8A29E]">
+                    <span aria-hidden="true" className="text-[#57534E] dark:text-[#A8A29E]">
                       ·
                     </span>
                     <a
                       href={`tel:+${BAKERY_INFO.secondaryPhoneDigits}`}
-                      className="hover:underline underline-offset-4"
+                      className="hover:underline underline-offset-4 whitespace-nowrap"
                     >
                       {BAKERY_INFO.secondaryPhoneDisplay}
                     </a>
@@ -749,7 +752,7 @@ export default function App() {
               </div>
             </div>
 
-            <div className="w-full h-80 rounded-xl overflow-hidden shadow-xs border border-[#E5E1DA] dark:border-[#342D28] bg-[#F3F1ED] dark:bg-[#26211D]">
+            <div className="w-full h-64 sm:h-80 lg:h-[360px] rounded-xl overflow-hidden shadow-xs border border-[#E5E1DA] dark:border-[#342D28] bg-[#F3F1ED] dark:bg-[#26211D]">
               <iframe
                 title="Hot Cake Bakers Kashmir Road Sialkot Location Map"
                 src="https://maps.google.com/maps?q=Hot%20Cake%20Bakers%20Lari%20Ada%20Kashmir%20Road%20Sialkot&t=&z=15&ie=UTF8&iwloc=&output=embed"
@@ -763,7 +766,11 @@ export default function App() {
       </main>
 
       {/* Section 4: Footer */}
-      <footer className="bg-[#FAF9F7] dark:bg-[#141210] py-10 pb-24 md:pb-10">
+      <footer
+        className={`bg-[#FAF9F7] dark:bg-[#141210] py-10 ${
+          totalItems > 0 ? 'pb-24 md:pb-10' : 'pb-10'
+        }`}
+      >
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="space-y-1">
             <p className="font-display text-lg font-semibold text-[#1C1815] dark:text-[#F5F2EC]">
@@ -772,19 +779,19 @@ export default function App() {
                 {BAKERY_INFO.urduName}
               </span>
             </p>
-            <p className="text-xs font-medium text-[#57534E] dark:text-[#D6D3D1] tabular-nums">
+            <p className="text-xs font-medium text-[#57534E] dark:text-[#D6D3D1] tabular-nums leading-relaxed">
               {BAKERY_INFO.address} · {BAKERY_INFO.shortHours} ·{' '}
-              <a href={`tel:+${BAKERY_INFO.whatsappDigits}`} className="hover:underline underline-offset-2">
+              <a href={`tel:+${BAKERY_INFO.whatsappDigits}`} className="hover:underline underline-offset-2 whitespace-nowrap">
                 {BAKERY_INFO.phoneDisplay}
               </a>
               {' / '}
-              <a href={`tel:+${BAKERY_INFO.secondaryPhoneDigits}`} className="hover:underline underline-offset-2">
+              <a href={`tel:+${BAKERY_INFO.secondaryPhoneDigits}`} className="hover:underline underline-offset-2 whitespace-nowrap">
                 {BAKERY_INFO.secondaryPhoneDisplay}
               </a>
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-6 text-xs font-medium text-[#57534E] dark:text-[#D6D3D1]">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-xs font-medium text-[#57534E] dark:text-[#D6D3D1]">
             <a href="#menu" className="hover:text-[#1C1815] dark:hover:text-[#F5F2EC] transition-colors">
               Full Menu
             </a>
@@ -852,43 +859,43 @@ export default function App() {
 
       {isLocationImageOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1C1815]/75 dark:bg-black/80 backdrop-blur-xs"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-[#1C1815]/75 dark:bg-black/80 backdrop-blur-xs"
           role="dialog"
           aria-modal="true"
           aria-labelledby="location-modal-title"
           onClick={() => setIsLocationImageOpen(false)}
         >
           <div
-            className="w-full max-w-3xl bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-xl overflow-hidden shadow-2xl"
+            className="w-full max-w-3xl max-h-[90dvh] flex flex-col bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-xl overflow-hidden shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="px-5 py-4 border-b border-[#E5E1DA] dark:border-[#342D28] flex items-center justify-between gap-4">
-              <div>
-                <h2 id="location-modal-title" className="font-display text-lg font-semibold text-[#1C1815] dark:text-[#F5F2EC]">
+            <div className="px-4 sm:px-5 py-3.5 sm:py-4 border-b border-[#E5E1DA] dark:border-[#342D28] flex items-center justify-between gap-4 shrink-0">
+              <div className="min-w-0">
+                <h2 id="location-modal-title" className="font-display text-base sm:text-lg font-semibold text-[#1C1815] dark:text-[#F5F2EC] truncate">
                   {BAKERY_INFO.name} — Kashmir Road Counter
                 </h2>
-                <p className="text-xs text-[#57534E] dark:text-[#D6D3D1] mt-0.5">
+                <p className="text-xs text-[#57534E] dark:text-[#D6D3D1] mt-0.5 truncate">
                   {BAKERY_INFO.address} · {BAKERY_INFO.services}
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setIsLocationImageOpen(false)}
-                className="p-2 text-[#57534E] dark:text-[#D6D3D1] hover:text-[#1C1815] dark:hover:text-[#F5F2EC] hover:bg-[#F3F1ED] dark:hover:bg-[#26211D] rounded-lg transition-colors cursor-pointer min-w-[40px] min-h-[40px] flex items-center justify-center"
+                className="p-2 text-[#57534E] dark:text-[#D6D3D1] hover:text-[#1C1815] dark:hover:text-[#F5F2EC] hover:bg-[#F3F1ED] dark:hover:bg-[#26211D] rounded-lg transition-colors cursor-pointer min-w-[40px] min-h-[40px] shrink-0 flex items-center justify-center"
                 aria-label="Close location photo"
               >
                 <X className="w-5 h-5" aria-hidden="true" />
               </button>
             </div>
-            <div className="bg-[#F3F1ED] dark:bg-[#26211D] max-h-[70vh] overflow-hidden">
+            <div className="bg-[#F3F1ED] dark:bg-[#26211D] min-h-0 flex-1 overflow-hidden">
               <ResilientImage
                 src={BAKERY_INFO.secondaryShowcaseImage}
                 alt="Hot Cake Bakers Kashmir Road Sialkot counter display"
                 fallbackTitle={BAKERY_INFO.address}
-                className="w-full h-full max-h-[70vh] object-cover"
+                className="w-full h-full max-h-[65dvh] object-cover"
               />
             </div>
-            <div className="px-5 py-3.5 bg-[#FAF9F7] dark:bg-[#26211D] border-t border-[#E5E1DA] dark:border-[#342D28] flex flex-wrap items-center justify-between gap-3">
+            <div className="px-4 sm:px-5 py-3.5 bg-[#FAF9F7] dark:bg-[#26211D] border-t border-[#E5E1DA] dark:border-[#342D28] flex flex-wrap items-center justify-between gap-3 shrink-0">
               <span className="text-xs text-[#57534E] dark:text-[#D6D3D1]">
                 Kashmir Road near Lari Adda, Kotli Behram, Sialkot
               </span>

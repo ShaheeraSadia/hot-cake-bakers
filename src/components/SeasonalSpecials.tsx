@@ -81,7 +81,7 @@ export const SeasonalSpecials: React.FC<SeasonalSpecialsProps> = ({
   return (
     <div
       id="seasonal"
-      className="scroll-mt-24 bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-xl p-5 sm:p-6 space-y-5"
+      className="scroll-mt-24 bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-xl p-4 sm:p-6 space-y-5"
     >
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
@@ -106,7 +106,7 @@ export const SeasonalSpecials: React.FC<SeasonalSpecialsProps> = ({
           onClick={() => setIsVisible((prev) => !prev)}
           aria-expanded={isVisible}
           aria-controls="seasonal-specials-panel"
-          className="inline-flex items-center justify-center gap-2 bg-[#FAF9F7] dark:bg-[#26211D] hover:bg-[#F3F1ED] dark:hover:bg-[#342D28] text-[#1C1815] dark:text-[#F5F2EC] border border-[#E5E1DA] dark:border-[#342D28] text-xs font-medium px-4 py-2.5 rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer min-h-[40px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1B4332]"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#FAF9F7] dark:bg-[#26211D] hover:bg-[#F3F1ED] dark:hover:bg-[#342D28] text-[#1C1815] dark:text-[#F5F2EC] border border-[#E5E1DA] dark:border-[#342D28] text-xs font-medium px-4 py-2.5 rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer min-h-[40px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1B4332]"
         >
           <span>{isVisible ? 'Hide Seasonal Specials' : 'Show Seasonal Specials'}</span>
           {isVisible ? (
@@ -120,7 +120,7 @@ export const SeasonalSpecials: React.FC<SeasonalSpecialsProps> = ({
       {isVisible && (
         <div id="seasonal-specials-panel">
           {status === 'loading' && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6" aria-busy="true">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" aria-busy="true">
               {[0, 1, 2].map((skeletonIdx) => (
                 <div
                   key={skeletonIdx}

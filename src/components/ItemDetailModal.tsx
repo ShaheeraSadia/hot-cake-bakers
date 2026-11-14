@@ -55,17 +55,17 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1C1815]/55 dark:bg-black/70 backdrop-blur-xs"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-[#1C1815]/55 dark:bg-black/70 backdrop-blur-xs"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-item-title"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-2xl bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-xl overflow-hidden shadow-xl grid grid-cols-1 md:grid-cols-2"
+        className="w-full max-w-2xl max-h-[90dvh] overflow-y-auto bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-xl shadow-xl grid grid-cols-1 md:grid-cols-2"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="relative aspect-[4/3] md:aspect-auto md:h-full bg-[#F3F1ED] dark:bg-[#26211D]">
+        <div className="relative aspect-[16/10] sm:aspect-[4/3] md:aspect-auto md:h-full bg-[#F3F1ED] dark:bg-[#26211D]">
           <ResilientImage
             src={item.image}
             alt={item.imageAlt}
@@ -74,9 +74,9 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
           />
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 flex flex-col gap-4">
-          <div className="flex items-start justify-between gap-4">
-            <div>
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6 flex flex-col gap-4">
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
               <p className="text-xs text-[#57534E] dark:text-[#D6D3D1]">
                 {item.category}
                 <span aria-hidden="true" className="mx-1.5">
@@ -86,7 +86,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
               </p>
               <h2
                 id="modal-item-title"
-                className="font-display text-2xl font-semibold text-[#1C1815] dark:text-[#F5F2EC] mt-1 leading-tight"
+                className="font-display text-xl sm:text-2xl font-semibold text-[#1C1815] dark:text-[#F5F2EC] mt-1 leading-tight"
               >
                 {item.name}
               </h2>
@@ -97,7 +97,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="p-2 text-[#57534E] dark:text-[#D6D3D1] hover:text-[#1C1815] dark:hover:text-[#F5F2EC] hover:bg-[#F3F1ED] dark:hover:bg-[#26211D] rounded-lg transition-colors cursor-pointer min-w-[40px] min-h-[40px] flex items-center justify-center"
+              className="p-2 text-[#57534E] dark:text-[#D6D3D1] hover:text-[#1C1815] dark:hover:text-[#F5F2EC] hover:bg-[#F3F1ED] dark:hover:bg-[#26211D] rounded-lg transition-colors cursor-pointer min-w-[40px] min-h-[40px] shrink-0 flex items-center justify-center"
               aria-label="Close item details"
             >
               <X className="w-5 h-5" aria-hidden="true" />
@@ -118,13 +118,13 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                     key={variant.id}
                     type="button"
                     onClick={() => setSelectedVariantId(variant.id)}
-                    className={`px-3 py-2 rounded-lg border text-left transition-colors cursor-pointer ${
+                    className={`min-w-0 px-3 py-2 rounded-lg border text-left transition-colors cursor-pointer ${
                       isSelected
                         ? 'border-[#1B4332] dark:border-[#52B788] bg-[#1B4332]/5 dark:bg-[#1B4332]/25 text-[#1C1815] dark:text-[#F5F2EC]'
                         : 'border-[#E5E1DA] dark:border-[#342D28] bg-white dark:bg-[#26211D] text-[#57534E] dark:text-[#D6D3D1] hover:border-[#1C1815]/30 dark:hover:border-[#F5F2EC]/30'
                     }`}
                   >
-                    <div className="text-xs font-medium whitespace-nowrap">{variant.label}</div>
+                    <div className="text-xs font-medium leading-snug">{variant.label}</div>
                     <div className="text-xs font-semibold text-[#1C1815] dark:text-[#F5F2EC] tabular-nums mt-0.5">
                       Rs. {variant.pricePkr.toLocaleString()}
                     </div>
@@ -154,12 +154,12 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                   ? 'e.g. Happy Birthday Ayesha!'
                   : 'e.g. Extra mint chutney, less spicy'
               }
-              className="w-full px-3.5 py-2.5 text-sm bg-[#FAF9F7] dark:bg-[#141210] border border-[#E5E1DA] dark:border-[#342D28] rounded-lg text-[#1C1815] dark:text-[#F5F2EC] placeholder:text-[#57534E] dark:placeholder:text-[#A8A29E] focus:outline-none focus:border-[#1B4332] dark:focus:border-[#52B788]"
+              className="w-full px-3.5 py-2.5 text-base sm:text-sm bg-[#FAF9F7] dark:bg-[#141210] border border-[#E5E1DA] dark:border-[#342D28] rounded-lg text-[#1C1815] dark:text-[#F5F2EC] placeholder:text-[#57534E] dark:placeholder:text-[#A8A29E] focus:outline-none focus:border-[#1B4332] dark:focus:border-[#52B788]"
             />
           </div>
 
-          <div className="mt-auto pt-4 border-t border-[#F0EDE7] dark:border-[#2E2823] flex items-center justify-between gap-4">
-            <div className="inline-flex items-center border border-[#E5E1DA] dark:border-[#342D28] rounded-lg overflow-hidden bg-[#FAF9F7] dark:bg-[#26211D]">
+          <div className="mt-auto pt-4 border-t border-[#F0EDE7] dark:border-[#2E2823] flex flex-wrap sm:flex-nowrap items-center justify-between gap-3">
+            <div className="inline-flex items-center border border-[#E5E1DA] dark:border-[#342D28] rounded-lg overflow-hidden bg-[#FAF9F7] dark:bg-[#26211D] shrink-0">
               <button
                 type="button"
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
@@ -181,7 +181,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
 
             <button
               type="submit"
-              className="flex-1 bg-[#1B4332] hover:bg-[#143325] text-white text-sm font-medium px-5 py-3 rounded-lg transition-colors cursor-pointer whitespace-nowrap tabular-nums"
+              className="flex-1 min-w-[160px] bg-[#1B4332] hover:bg-[#143325] text-white text-sm font-medium px-5 py-3 rounded-lg transition-colors cursor-pointer whitespace-nowrap tabular-nums"
             >
               Add · Rs. {(activeVariant.pricePkr * quantity).toLocaleString()}
             </button>

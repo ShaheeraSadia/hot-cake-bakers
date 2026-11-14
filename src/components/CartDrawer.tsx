@@ -204,29 +204,29 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
       onClick={onClose}
     >
       <aside
-        className="w-full max-w-md bg-[#FAF9F7] dark:bg-[#141210] h-full flex flex-col border-l border-[#E5E1DA] dark:border-[#342D28] shadow-2xl"
+        className="w-full max-w-md bg-[#FAF9F7] dark:bg-[#141210] h-dvh max-h-dvh flex flex-col border-l border-[#E5E1DA] dark:border-[#342D28] shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="px-6 py-4 bg-white dark:bg-[#1D1916] border-b border-[#E5E1DA] dark:border-[#342D28] flex items-center justify-between gap-4">
-          <div>
+        <div className="px-4 sm:px-6 py-4 bg-white dark:bg-[#1D1916] border-b border-[#E5E1DA] dark:border-[#342D28] flex items-center justify-between gap-4">
+          <div className="min-w-0">
             <h2 id="cart-drawer-title" className="font-display text-xl font-semibold text-[#1C1815] dark:text-[#F5F2EC]">
               Your Bakery Bag
             </h2>
-            <p className="text-xs text-[#57534E] dark:text-[#D6D3D1] mt-0.5">
+            <p className="text-xs text-[#57534E] dark:text-[#D6D3D1] mt-0.5 truncate">
               Direct WhatsApp Checkout · {BAKERY_INFO.phoneDisplay}
             </p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-2 text-[#57534E] dark:text-[#D6D3D1] hover:text-[#1C1815] dark:hover:text-[#F5F2EC] hover:bg-[#F3F1ED] dark:hover:bg-[#26211D] rounded-lg transition-colors cursor-pointer min-w-[40px] min-h-[40px] flex items-center justify-center"
+            className="p-2 text-[#57534E] dark:text-[#D6D3D1] hover:text-[#1C1815] dark:hover:text-[#F5F2EC] hover:bg-[#F3F1ED] dark:hover:bg-[#26211D] rounded-lg transition-colors cursor-pointer min-w-[40px] min-h-[40px] shrink-0 flex items-center justify-center"
             aria-label="Close bag drawer"
           >
             <X className="w-5 h-5" aria-hidden="true" />
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-6 py-5 space-y-6">
+        <div className="flex-1 min-h-0 overflow-y-auto px-4 sm:px-6 py-5 space-y-6">
           {items.length === 0 ? (
             <div className="py-10 space-y-8">
               <div className="text-center space-y-3">
@@ -314,7 +314,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
           ) : (
             <>
               <div className="space-y-3">
-                <div className="flex items-center justify-between gap-2">
+                <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5">
                   <h3 className="text-sm font-semibold text-[#1C1815] dark:text-[#F5F2EC]">
                     Order Items ({items.reduce((acc, i) => acc + i.quantity, 0)})
                   </h3>
@@ -322,7 +322,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     <button
                       type="button"
                       onClick={onClose}
-                      className="text-xs font-medium text-[#1B4332] dark:text-[#74C69D] hover:underline underline-offset-2 cursor-pointer"
+                      className="text-xs font-medium text-[#1B4332] dark:text-[#74C69D] hover:underline underline-offset-2 cursor-pointer whitespace-nowrap"
                     >
                       + Add More Items
                     </button>
@@ -332,7 +332,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         onClearCart();
                         setOrderPrepared(false);
                       }}
-                      className="text-xs text-[#57534E] dark:text-[#D6D3D1] hover:text-[#1C1815] dark:hover:text-[#F5F2EC] underline underline-offset-2 cursor-pointer"
+                      className="text-xs text-[#57534E] dark:text-[#D6D3D1] hover:text-[#1C1815] dark:hover:text-[#F5F2EC] underline underline-offset-2 cursor-pointer whitespace-nowrap"
                     >
                       Clear Bag
                     </button>
@@ -418,7 +418,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   <button
                     type="button"
                     onClick={() => onChangeOrderType('delivery')}
-                    className={`py-2 px-3 text-xs font-medium rounded-md transition-colors cursor-pointer whitespace-nowrap ${
+                    className={`py-2 px-2 sm:px-3 text-xs font-medium rounded-md transition-colors cursor-pointer whitespace-nowrap ${
                       orderType === 'delivery'
                         ? 'bg-white dark:bg-[#1D1916] text-[#1C1815] dark:text-[#F5F2EC] shadow-xs'
                         : 'text-[#57534E] dark:text-[#D6D3D1] hover:text-[#1C1815] dark:hover:text-[#F5F2EC]'
@@ -429,7 +429,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   <button
                     type="button"
                     onClick={() => onChangeOrderType('takeout')}
-                    className={`py-2 px-3 text-xs font-medium rounded-md transition-colors cursor-pointer whitespace-nowrap ${
+                    className={`py-2 px-2 sm:px-3 text-xs font-medium rounded-md transition-colors cursor-pointer whitespace-nowrap ${
                       orderType === 'takeout'
                         ? 'bg-white dark:bg-[#1D1916] text-[#1C1815] dark:text-[#F5F2EC] shadow-xs'
                         : 'text-[#57534E] dark:text-[#D6D3D1] hover:text-[#1C1815] dark:hover:text-[#F5F2EC]'
@@ -497,7 +497,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         setFormError('');
                       }}
                       placeholder="e.g. Bilal Ahmed"
-                      className="w-full px-3.5 py-2.5 text-sm bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-lg text-[#1C1815] dark:text-[#F5F2EC] placeholder:text-[#57534E] dark:placeholder:text-[#A8A29E] focus:outline-none focus:border-[#1B4332] dark:focus:border-[#52B788]"
+                      className="w-full px-3.5 py-2.5 text-base sm:text-sm bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-lg text-[#1C1815] dark:text-[#F5F2EC] placeholder:text-[#57534E] dark:placeholder:text-[#A8A29E] focus:outline-none focus:border-[#1B4332] dark:focus:border-[#52B788]"
                     />
                   </div>
 
@@ -514,7 +514,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         setFormError('');
                       }}
                       placeholder="e.g. 0300 1234567"
-                      className="w-full px-3.5 py-2.5 text-sm bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-lg text-[#1C1815] dark:text-[#F5F2EC] placeholder:text-[#57534E] dark:placeholder:text-[#A8A29E] focus:outline-none focus:border-[#1B4332] dark:focus:border-[#52B788]"
+                      className="w-full px-3.5 py-2.5 text-base sm:text-sm bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-lg text-[#1C1815] dark:text-[#F5F2EC] placeholder:text-[#57534E] dark:placeholder:text-[#A8A29E] focus:outline-none focus:border-[#1B4332] dark:focus:border-[#52B788]"
                     />
                   </div>
 
@@ -532,7 +532,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                           setFormError('');
                         }}
                         placeholder="House #, Street, Kotli Behram / Kashmir Road, Sialkot"
-                        className="w-full px-3.5 py-2.5 text-sm bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-lg text-[#1C1815] dark:text-[#F5F2EC] placeholder:text-[#57534E] dark:placeholder:text-[#A8A29E] focus:outline-none focus:border-[#1B4332] dark:focus:border-[#52B788]"
+                        className="w-full px-3.5 py-2.5 text-base sm:text-sm bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-lg text-[#1C1815] dark:text-[#F5F2EC] placeholder:text-[#57534E] dark:placeholder:text-[#A8A29E] focus:outline-none focus:border-[#1B4332] dark:focus:border-[#52B788]"
                       />
                     </div>
                   )}
@@ -549,7 +549,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         setCustomer((c) => ({ ...c, instructions: e.target.value }))
                       }
                       placeholder="Preferred pickup time, cake candles, or landmark"
-                      className="w-full px-3.5 py-2.5 text-sm bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-lg text-[#1C1815] dark:text-[#F5F2EC] placeholder:text-[#57534E] dark:placeholder:text-[#A8A29E] focus:outline-none focus:border-[#1B4332] dark:focus:border-[#52B788]"
+                      className="w-full px-3.5 py-2.5 text-base sm:text-sm bg-white dark:bg-[#1D1916] border border-[#E5E1DA] dark:border-[#342D28] rounded-lg text-[#1C1815] dark:text-[#F5F2EC] placeholder:text-[#57534E] dark:placeholder:text-[#A8A29E] focus:outline-none focus:border-[#1B4332] dark:focus:border-[#52B788]"
                     />
                   </div>
                 </div>
@@ -576,7 +576,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
         </div>
 
         {items.length > 0 && (
-          <div className="px-6 py-4 bg-white dark:bg-[#1D1916] border-t border-[#E5E1DA] dark:border-[#342D28] space-y-3">
+          <div className="px-4 sm:px-6 py-4 bg-white dark:bg-[#1D1916] border-t border-[#E5E1DA] dark:border-[#342D28] space-y-3 shrink-0">
             <div className="space-y-1 text-sm">
               <div className="flex justify-between text-[#57534E] dark:text-[#D6D3D1]">
                 <span>Subtotal</span>

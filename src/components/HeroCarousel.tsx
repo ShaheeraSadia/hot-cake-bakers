@@ -45,7 +45,7 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
 
   return (
     <div
-      className="relative h-full min-h-[300px] sm:min-h-[380px] aspect-[4/3] lg:aspect-auto rounded-xl overflow-hidden border border-[#E5E1DA] dark:border-[#342D28] bg-[#1C1815] group"
+      className="relative h-full min-h-[320px] sm:min-h-[380px] lg:min-h-[430px] aspect-[4/3] lg:aspect-auto rounded-xl overflow-hidden border border-[#E5E1DA] dark:border-[#342D28] bg-[#1C1815] group"
       role="region"
       aria-roledescription="carousel"
       aria-label="Hot Cake Bakers specialty showcase"
@@ -77,16 +77,16 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
 
       {/* Measured contrast scrim for overlaid typography */}
       <div
-        className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-black/85 via-black/45 to-transparent z-20 pointer-events-none"
+        className="absolute inset-x-0 bottom-0 h-44 sm:h-48 bg-gradient-to-t from-black/85 via-black/45 to-transparent z-20 pointer-events-none"
         aria-hidden="true"
       />
 
       {/* Previous / Next controls */}
-      <div className="absolute top-3.5 right-3.5 z-30 flex items-center gap-1.5">
+      <div className="absolute top-3 right-3 sm:top-3.5 sm:right-3.5 z-30 flex items-center gap-1.5">
         <button
           type="button"
           onClick={goToPrev}
-          className="w-10 h-10 rounded-lg bg-black/50 hover:bg-black/75 text-white border border-white/15 backdrop-blur-xs flex items-center justify-center transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-black/55 hover:bg-black/75 text-white border border-white/15 backdrop-blur-xs flex items-center justify-center transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           aria-label="Previous specialty photo"
         >
           <ChevronLeft className="w-4 h-4" aria-hidden="true" />
@@ -94,7 +94,7 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
         <button
           type="button"
           onClick={goToNext}
-          className="w-10 h-10 rounded-lg bg-black/50 hover:bg-black/75 text-white border border-white/15 backdrop-blur-xs flex items-center justify-center transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-black/55 hover:bg-black/75 text-white border border-white/15 backdrop-blur-xs flex items-center justify-center transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           aria-label="Next specialty photo"
         >
           <ChevronRight className="w-4 h-4" aria-hidden="true" />
@@ -102,23 +102,23 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
       </div>
 
       {/* Bottom caption & slide indicators */}
-      <div className="absolute inset-x-0 bottom-0 z-30 p-5 sm:p-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4 text-white">
-        <div className="space-y-1 min-w-0">
+      <div className="absolute inset-x-0 bottom-0 z-30 p-4 sm:p-6 flex flex-col sm:flex-row sm:items-end justify-between gap-2.5 sm:gap-4 text-white">
+        <div className="space-y-0.5 sm:space-y-1 min-w-0">
           <p className="text-xs text-white/85 truncate">{currentSlide.kicker}</p>
           {onSelectCategory ? (
             <a
               href="#menu"
               onClick={() => onSelectCategory(currentSlide.category)}
-              className="inline-block font-display text-xl sm:text-2xl font-semibold text-white hover:underline underline-offset-4 leading-snug focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              className="inline-block font-display text-lg sm:text-2xl font-semibold text-white hover:underline underline-offset-4 leading-snug focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
               {currentSlide.title}
             </a>
           ) : (
-            <p className="font-display text-xl sm:text-2xl font-semibold text-white leading-snug">
+            <p className="font-display text-lg sm:text-2xl font-semibold text-white leading-snug">
               {currentSlide.title}
             </p>
           )}
-          <p className="font-urdu text-sm text-white/90" dir="rtl" lang="ur">
+          <p className="font-urdu text-xs sm:text-sm text-white/90" dir="rtl" lang="ur">
             {currentSlide.urduTitle}
           </p>
         </div>
